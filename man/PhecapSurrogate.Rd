@@ -25,6 +25,3 @@ Define a surrogate varible from existing features, and specify associated lower 
 \details{
 This function only stores the definition. No calculation is done.
 }
-\seealso{
-See \code{\link{PheCAP-package}} for code examples.
-}

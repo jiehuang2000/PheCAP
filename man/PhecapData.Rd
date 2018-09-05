@@ -42,6 +42,3 @@ Note that icd_feature, nlp_feature and hu_feature cannot be NULL, while training
 can be NULL if only feature extraction is needed, and validation_label can be NULL 
 if only feature extraction and model training is needed.
 }
-\seealso{
-See \code{\link{PheCAP-package}} for code examples.
-}

@@ -56,6 +56,3 @@ An object of class \code{PhecapModel}, with components
 Train the phenotyping model on the training dataset, and evaluate 
 its performance via random splits of the training dataset.
 }
-\seealso{
-See \code{\link{PheCAP-package}} for code examples.
-}

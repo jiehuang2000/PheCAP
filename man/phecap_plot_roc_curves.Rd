@@ -42,6 +42,3 @@ Otherwise, the base R graphics functions will be used.}
 \description{
 Plot ROC-like curves to illustrate phenotyping accuracy.
 }
-\seealso{
-See \code{\link{PheCAP-package}} for code examples.
-}

@@ -48,8 +48,6 @@ phecap_read_or_set_frame <- function(source)
 #' 
 #' @return An object of class \code{PhecapData}.
 #' 
-#' @seealso See \code{\link{PheCAP-package}} for code examples.
-#' 
 #' @export
 PhecapData <- function(
   icd_feature, nlp_feature, hu_feature,
@@ -126,8 +124,6 @@ PhecapData <- function(
 #' 
 #' @return An object of class \code{PhecapSurrogate}.
 #' 
-#' @seealso See \code{\link{PheCAP-package}} for code examples.
-#' 
 #' @export
 PhecapSurrogate <- function(
   variable_names, 
@@ -179,8 +175,6 @@ phecap_check_surrogates <- function(
 #' @return A character vector consisting of the names of the variables selected,
 #' with attribute frequency, which consists of the proportion of being selected
 #' among all subsamples for each variable.
-#' 
-#' @seealso See \code{\link{PheCAP-package}} for code examples.
 #' 
 #' @export
 phecap_run_feature_extraction <- function(
@@ -363,8 +357,6 @@ phecap_generate_feature_matrix <- function(
 #' \item{fit_function}{the function used for fitting}
 #' \item{predict_function}{the function used for prediction}
 #' 
-#' @seealso See \code{\link{PheCAP-package}} for code examples.
-#' 
 #' @export
 phecap_train_phenotyping_model <- function(
   data, surrogates, feature_selected, 
@@ -434,8 +426,6 @@ phecap_train_phenotyping_model <- function(
 #' \item{valid_roc}{ROC on validation dataset}
 #' \item{valid_auc}{AUC on validation dataset}
 #' 
-#' @seealso See \code{\link{PheCAP-package}} for code examples.
-#' 
 #' @export
 phecap_validate_phenotyping_model <- function(
   data, surrogates, model)
@@ -496,8 +486,6 @@ phecap_validate_phenotyping_model <- function(
 #' @return A \code{data.frame} with two columns: 
 #' \item{patient_index}{patient identifier,} 
 #' \item{prediction}{predicted phenotype.}
-#' 
-#' @seealso See \code{\link{PheCAP-package}} for code examples.
 #' 
 #' @export
 phecap_predict_phenotype <- function(
@@ -601,8 +589,6 @@ print.PhecapValidation <- function(x, ...)
 #' @param ggplot if TRUE and ggplot2 is installed, ggplot will be used for the figure.
 #' Otherwise, the base R graphics functions will be used.
 #' @param \dots arguments to be ignored.
-#' 
-#' @seealso See \code{\link{PheCAP-package}} for code examples.
 #' 
 #' @export
 phecap_plot_roc_curves <- function(

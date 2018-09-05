@@ -35,6 +35,3 @@ Run surrogate-assisted feature extraction (SAFE) using unlabeled data and subsam
 In this unlabeled setting, the extremes of each surrogate are used to define cases and controls.
 The variables selected are those selected in at least half of the subsamples.
 }
-\seealso{
-See \code{\link{PheCAP-package}} for code examples.
-}

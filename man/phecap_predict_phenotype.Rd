@@ -23,6 +23,3 @@ A \code{data.frame} with two columns:
 \description{
 Compute predicted probability of having the phenotype for each patient in the dataset.
 }
-\seealso{
-See \code{\link{PheCAP-package}} for code examples.
-}

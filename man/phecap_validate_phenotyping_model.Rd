@@ -30,6 +30,3 @@ An object of class \code{PhecapValidation}, with components
 Apply the trained model to all patients in the validation dataset,
 and measure the prediction accuracy via ROC and AUC.
 }
-\seealso{
-See \code{\link{PheCAP-package}} for code examples.
-}
