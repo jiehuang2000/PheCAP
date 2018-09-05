@@ -1,0 +1,21 @@
+__High-Throughput Phenotyping with Electronic Health Records using a Common Automated Pipeline__
+
+## Overview
+
+Implement surrogate-assisted feature extraction (SAFE) and common machine learning approaches to train and validate phenotyping models. Background and details about the methods can be found at 
+[Yu et al. (2017)](https://doi.org/10.1093/jamia/ocw135) and [Liao et al. (2015)](https://doi.org/10.1093/jamia/ocw135).
+
+## Installation
+
+Install development version from GitHub:
+
+```{r, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("parse-health/PheCAP")
+```
+
+## References
+
+- Sheng Yu, Abhishek Chakrabortty, Katherine P Liao, Tianrun Cai, Ashwin N Ananthakrishnan, Vivian S Gainer, Susanne E Churchill, Peter Szolovits, Shawn N Murphy, Isaac S Kohane, Tianxi Cai (2017). [Surrogate-assisted feature extraction for high-throughput phenotyping](https://doi.org/10.1093/jamia/ocw135). _Journal of the American Medical Informatics Association_, 24, e143–e149. 
+
+- Katherine P Liao, Tianxi Cai, Guergana K Savova, Shawn N Murphy, Elizabeth W Karlson, Ashwin N Ananthakrishnan, Vivian S Gainer, Stanley Y Shaw, Zongqi Xia, Peter Szolovits, Susanne Churchill, Isaac Kohane (2015). [Development of phenotype algorithms using electronic medical records and incorporating natural language processing](https://doi.org/10.1136/bmj.h1885). _BMJ Research Methods & Reporting_, 350:h1885.
