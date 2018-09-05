@@ -23,7 +23,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-home">
+    <div class="container template-article">
       <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -67,7 +67,10 @@
 
       
       </header><div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
+    
+
+    
     
 <p><strong>High-Throughput Phenotyping with Electronic Health Records using a Common Automated Pipeline</strong></p>
 <div id="overview" class="section level2">
@@ -78,12 +81,9 @@
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>If <code>devtools</code> is not installed, uncomment the line below.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a></code></pre></div>
 <p>Install development version from GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"parse-health/PheCAP"</span>)</a></code></pre></div>
-<p>Load package into R:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(PheCAP)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("devtools")</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"parse-health/PheCAP"</span>)</a></code></pre></div>
 </div>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
@@ -93,10 +93,9 @@
 <li><p>Katherine P Liao, Tianxi Cai, Guergana K Savova, Shawn N Murphy, Elizabeth W Karlson, Ashwin N Ananthakrishnan, Vivian S Gainer, Stanley Y Shaw, Zongqi Xia, Peter Szolovits, Susanne Churchill, Isaac Kohane (2015). <a href="https://doi.org/10.1136/bmj.h1885">Development of phenotype algorithms using electronic medical records and incorporating natural language processing</a>. <em>BMJ Research Methods &amp; Reporting</em>, 350:h1885.</p></li>
 </ul>
 </div>
-
   </div>
 
-  <div class="col-md-3" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
@@ -121,7 +120,8 @@
 </ul>
 </div>
 
-  </div>
+      </div>
+
 </div>
 
 
