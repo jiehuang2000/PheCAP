@@ -3,6 +3,8 @@ library(PheCAP)
 
 ## ------------------------------------------------------------------------
 set.seed(123)
+
+## ------------------------------------------------------------------------
 w <- rgamma(9000, 0.3)
 icd_feature <- data.frame(
   PatientID = sample.int(10000, 9000),
@@ -10,6 +12,8 @@ icd_feature <- data.frame(
   ICD2 = rpois(9000, 6 * (rgamma(9000, 0.8) + w) / 1.1),
   ICD3 = rpois(9000, 1 * rgamma(9000, 0.5) / 0.5),
   ICD4 = rpois(9000, 2 * rgamma(9000, 0.5) / 0.5))
+
+## ------------------------------------------------------------------------
 w <- rgamma(9500, 0.4)
 nlp_feature <- data.frame(
   PatientID = sample.int(10000, 9500),
@@ -20,9 +24,13 @@ nlp_feature <- data.frame(
   NLP5 = rpois(9500, 3 * rgamma(9500, 0.5) / 0.5),
   NLP6 = rpois(9500, 2 * rgamma(9500, 0.5) / 0.5),
   NLP7 = rpois(9500, 1 * rgamma(9500, 0.5) / 0.5))
+
+## ------------------------------------------------------------------------
 hu_feature <- data.frame(
   PatientID = seq_len(10000),
   NoteCount = rpois(10000, 30 * rgamma(10000, 0.1) / 0.1))
+
+## ------------------------------------------------------------------------
 df <- merge(
   merge(icd_feature, nlp_feature, by = "PatientID", all = TRUE),
   hu_feature, by = "PatientID", all = TRUE)
@@ -32,6 +40,8 @@ expr <- quote(plogis(
   -5 + 1.5 * log1p(ICD1) + log1p(NLP1) +
     0.8 * log1p(NLP4) - 0.5 * log1p(NoteCount)))
 summary(with(df, eval(expr)))
+
+## ------------------------------------------------------------------------
 training_label <- data.frame(
   PatientID = head(ii, 200),
   Label = rbinom(200, 1, with(df[head(ii, 200), ], eval(expr))))

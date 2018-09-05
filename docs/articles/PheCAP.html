@@ -76,62 +76,65 @@
     
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(PheCAP)</a></code></pre></div>
 <p>Generate simulated data.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">w &lt;-<span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9000</span>, <span class="fl">0.3</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">icd_feature &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">  <span class="dt">PatientID =</span> <span class="kw">sample.int</span>(<span class="dv">10000</span>, <span class="dv">9000</span>),</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="dt">ICD1 =</span> <span class="kw">rpois</span>(<span class="dv">9000</span>, <span class="dv">7</span> <span class="op">*</span><span class="st"> </span>(<span class="kw">rgamma</span>(<span class="dv">9000</span>, <span class="fl">0.2</span>) <span class="op">+</span><span class="st"> </span>w) <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>),</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">  <span class="dt">ICD2 =</span> <span class="kw">rpois</span>(<span class="dv">9000</span>, <span class="dv">6</span> <span class="op">*</span><span class="st"> </span>(<span class="kw">rgamma</span>(<span class="dv">9000</span>, <span class="fl">0.8</span>) <span class="op">+</span><span class="st"> </span>w) <span class="op">/</span><span class="st"> </span><span class="fl">1.1</span>),</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">  <span class="dt">ICD3 =</span> <span class="kw">rpois</span>(<span class="dv">9000</span>, <span class="dv">1</span> <span class="op">*</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9000</span>, <span class="fl">0.5</span>) <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>),</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">  <span class="dt">ICD4 =</span> <span class="kw">rpois</span>(<span class="dv">9000</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9000</span>, <span class="fl">0.5</span>) <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>))</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">w &lt;-<span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">0.4</span>)</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">nlp_feature &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">  <span class="dt">PatientID =</span> <span class="kw">sample.int</span>(<span class="dv">10000</span>, <span class="dv">9500</span>),</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">  <span class="dt">NLP1 =</span> <span class="kw">rpois</span>(<span class="dv">9500</span>, <span class="dv">8</span> <span class="op">*</span><span class="st"> </span>(<span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">0.2</span>) <span class="op">+</span><span class="st"> </span>w) <span class="op">/</span><span class="st"> </span><span class="fl">0.6</span>),</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">  <span class="dt">NLP2 =</span> <span class="kw">rpois</span>(<span class="dv">9500</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(<span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">1.1</span>) <span class="op">+</span><span class="st"> </span>w) <span class="op">/</span><span class="st"> </span><span class="fl">1.5</span>),</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">  <span class="dt">NLP3 =</span> <span class="kw">rpois</span>(<span class="dv">9500</span>, <span class="dv">5</span> <span class="op">*</span><span class="st"> </span>(<span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">0.1</span>) <span class="op">+</span><span class="st"> </span>w) <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>),</a>
-<a class="sourceLine" id="cb2-15" data-line-number="15">  <span class="dt">NLP4 =</span> <span class="kw">rpois</span>(<span class="dv">9500</span>, <span class="dv">11</span> <span class="op">*</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">1.9</span>) <span class="op">/</span><span class="st"> </span><span class="fl">1.9</span>),</a>
-<a class="sourceLine" id="cb2-16" data-line-number="16">  <span class="dt">NLP5 =</span> <span class="kw">rpois</span>(<span class="dv">9500</span>, <span class="dv">3</span> <span class="op">*</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">0.5</span>) <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>),</a>
-<a class="sourceLine" id="cb2-17" data-line-number="17">  <span class="dt">NLP6 =</span> <span class="kw">rpois</span>(<span class="dv">9500</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">0.5</span>) <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>),</a>
-<a class="sourceLine" id="cb2-18" data-line-number="18">  <span class="dt">NLP7 =</span> <span class="kw">rpois</span>(<span class="dv">9500</span>, <span class="dv">1</span> <span class="op">*</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">0.5</span>) <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>))</a>
-<a class="sourceLine" id="cb2-19" data-line-number="19">hu_feature &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb2-20" data-line-number="20">  <span class="dt">PatientID =</span> <span class="kw">seq_len</span>(<span class="dv">10000</span>),</a>
-<a class="sourceLine" id="cb2-21" data-line-number="21">  <span class="dt">NoteCount =</span> <span class="kw">rpois</span>(<span class="dv">10000</span>, <span class="dv">30</span> <span class="op">*</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">10000</span>, <span class="fl">0.1</span>) <span class="op">/</span><span class="st"> </span><span class="fl">0.1</span>))</a>
-<a class="sourceLine" id="cb2-22" data-line-number="22">df &lt;-<span class="st"> </span><span class="kw">merge</span>(</a>
-<a class="sourceLine" id="cb2-23" data-line-number="23">  <span class="kw">merge</span>(icd_feature, nlp_feature, <span class="dt">by =</span> <span class="st">"PatientID"</span>, <span class="dt">all =</span> <span class="ot">TRUE</span>),</a>
-<a class="sourceLine" id="cb2-24" data-line-number="24">  hu_feature, <span class="dt">by =</span> <span class="st">"PatientID"</span>, <span class="dt">all =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb2-25" data-line-number="25">df[<span class="kw">is.na</span>(df)] &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb2-26" data-line-number="26">ii &lt;-<span class="st"> </span><span class="kw">sample.int</span>(<span class="dv">5000</span>, <span class="dv">400</span>)</a>
-<a class="sourceLine" id="cb2-27" data-line-number="27">expr &lt;-<span class="st"> </span><span class="kw">quote</span>(<span class="kw">plogis</span>(</a>
-<a class="sourceLine" id="cb2-28" data-line-number="28">  <span class="dv">-5</span> <span class="op">+</span><span class="st"> </span><span class="fl">1.5</span> <span class="op">*</span><span class="st"> </span><span class="kw">log1p</span>(ICD1) <span class="op">+</span><span class="st"> </span><span class="kw">log1p</span>(NLP1) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-29" data-line-number="29"><span class="st">    </span><span class="fl">0.8</span> <span class="op">*</span><span class="st"> </span><span class="kw">log1p</span>(NLP4) <span class="op">-</span><span class="st"> </span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span><span class="kw">log1p</span>(NoteCount)))</a>
-<a class="sourceLine" id="cb2-30" data-line-number="30"><span class="kw">summary</span>(<span class="kw">with</span>(df, <span class="kw">eval</span>(expr)))</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a></code></pre></div>
+<p>Generate ICD feature</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">w &lt;-<span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9000</span>, <span class="fl">0.3</span>)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">icd_feature &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  <span class="dt">PatientID =</span> <span class="kw">sample.int</span>(<span class="dv">10000</span>, <span class="dv">9000</span>),</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  <span class="dt">ICD1 =</span> <span class="kw">rpois</span>(<span class="dv">9000</span>, <span class="dv">7</span> <span class="op">*</span><span class="st"> </span>(<span class="kw">rgamma</span>(<span class="dv">9000</span>, <span class="fl">0.2</span>) <span class="op">+</span><span class="st"> </span>w) <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>),</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="dt">ICD2 =</span> <span class="kw">rpois</span>(<span class="dv">9000</span>, <span class="dv">6</span> <span class="op">*</span><span class="st"> </span>(<span class="kw">rgamma</span>(<span class="dv">9000</span>, <span class="fl">0.8</span>) <span class="op">+</span><span class="st"> </span>w) <span class="op">/</span><span class="st"> </span><span class="fl">1.1</span>),</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">  <span class="dt">ICD3 =</span> <span class="kw">rpois</span>(<span class="dv">9000</span>, <span class="dv">1</span> <span class="op">*</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9000</span>, <span class="fl">0.5</span>) <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>),</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">  <span class="dt">ICD4 =</span> <span class="kw">rpois</span>(<span class="dv">9000</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9000</span>, <span class="fl">0.5</span>) <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>))</a></code></pre></div>
+<p>Generate NLP feature</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">w &lt;-<span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">0.4</span>)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">nlp_feature &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="dt">PatientID =</span> <span class="kw">sample.int</span>(<span class="dv">10000</span>, <span class="dv">9500</span>),</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">  <span class="dt">NLP1 =</span> <span class="kw">rpois</span>(<span class="dv">9500</span>, <span class="dv">8</span> <span class="op">*</span><span class="st"> </span>(<span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">0.2</span>) <span class="op">+</span><span class="st"> </span>w) <span class="op">/</span><span class="st"> </span><span class="fl">0.6</span>),</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">  <span class="dt">NLP2 =</span> <span class="kw">rpois</span>(<span class="dv">9500</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span>(<span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">1.1</span>) <span class="op">+</span><span class="st"> </span>w) <span class="op">/</span><span class="st"> </span><span class="fl">1.5</span>),</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">  <span class="dt">NLP3 =</span> <span class="kw">rpois</span>(<span class="dv">9500</span>, <span class="dv">5</span> <span class="op">*</span><span class="st"> </span>(<span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">0.1</span>) <span class="op">+</span><span class="st"> </span>w) <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>),</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">  <span class="dt">NLP4 =</span> <span class="kw">rpois</span>(<span class="dv">9500</span>, <span class="dv">11</span> <span class="op">*</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">1.9</span>) <span class="op">/</span><span class="st"> </span><span class="fl">1.9</span>),</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">  <span class="dt">NLP5 =</span> <span class="kw">rpois</span>(<span class="dv">9500</span>, <span class="dv">3</span> <span class="op">*</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">0.5</span>) <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>),</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">  <span class="dt">NLP6 =</span> <span class="kw">rpois</span>(<span class="dv">9500</span>, <span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">0.5</span>) <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>),</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">  <span class="dt">NLP7 =</span> <span class="kw">rpois</span>(<span class="dv">9500</span>, <span class="dv">1</span> <span class="op">*</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">9500</span>, <span class="fl">0.5</span>) <span class="op">/</span><span class="st"> </span><span class="fl">0.5</span>))</a></code></pre></div>
+<p>Generate HU feature</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">hu_feature &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">  <span class="dt">PatientID =</span> <span class="kw">seq_len</span>(<span class="dv">10000</span>),</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">  <span class="dt">NoteCount =</span> <span class="kw">rpois</span>(<span class="dv">10000</span>, <span class="dv">30</span> <span class="op">*</span><span class="st"> </span><span class="kw">rgamma</span>(<span class="dv">10000</span>, <span class="fl">0.1</span>) <span class="op">/</span><span class="st"> </span><span class="fl">0.1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">df &lt;-<span class="st"> </span><span class="kw">merge</span>(</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="kw">merge</span>(icd_feature, nlp_feature, <span class="dt">by =</span> <span class="st">"PatientID"</span>, <span class="dt">all =</span> <span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  hu_feature, <span class="dt">by =</span> <span class="st">"PatientID"</span>, <span class="dt">all =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">df[<span class="kw">is.na</span>(df)] &lt;-<span class="st"> </span><span class="dv">0</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">ii &lt;-<span class="st"> </span><span class="kw">sample.int</span>(<span class="dv">5000</span>, <span class="dv">400</span>)</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">expr &lt;-<span class="st"> </span><span class="kw">quote</span>(<span class="kw">plogis</span>(</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">  <span class="dv">-5</span> <span class="op">+</span><span class="st"> </span><span class="fl">1.5</span> <span class="op">*</span><span class="st"> </span><span class="kw">log1p</span>(ICD1) <span class="op">+</span><span class="st"> </span><span class="kw">log1p</span>(NLP1) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="st">    </span><span class="fl">0.8</span> <span class="op">*</span><span class="st"> </span><span class="kw">log1p</span>(NLP4) <span class="op">-</span><span class="st"> </span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span><span class="kw">log1p</span>(NoteCount)))</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="kw">summary</span>(<span class="kw">with</span>(df, <span class="kw">eval</span>(expr)))</a></code></pre></div>
 <pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
 ## 0.0003186 0.0973158 0.3578100 0.4289767 0.7676951 0.9995623</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">training_label &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">  <span class="dt">PatientID =</span> <span class="kw">head</span>(ii, <span class="dv">200</span>),</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">  <span class="dt">Label =</span> <span class="kw">rbinom</span>(<span class="dv">200</span>, <span class="dv">1</span>, <span class="kw">with</span>(df[<span class="kw">head</span>(ii, <span class="dv">200</span>), ], <span class="kw">eval</span>(expr))))</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">validation_label &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">  <span class="dt">PatientID =</span> <span class="kw">tail</span>(ii, <span class="dv">200</span>),</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">  <span class="dt">Label =</span> <span class="kw">rbinom</span>(<span class="dv">200</span>, <span class="dv">1</span>, <span class="kw">with</span>(df[<span class="kw">tail</span>(ii, <span class="dv">200</span>), ], <span class="kw">eval</span>(expr))))</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">training_label &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">  <span class="dt">PatientID =</span> <span class="kw">head</span>(ii, <span class="dv">200</span>),</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">  <span class="dt">Label =</span> <span class="kw">rbinom</span>(<span class="dv">200</span>, <span class="dv">1</span>, <span class="kw">with</span>(df[<span class="kw">head</span>(ii, <span class="dv">200</span>), ], <span class="kw">eval</span>(expr))))</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">validation_label &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">  <span class="dt">PatientID =</span> <span class="kw">tail</span>(ii, <span class="dv">200</span>),</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">  <span class="dt">Label =</span> <span class="kw">rbinom</span>(<span class="dv">200</span>, <span class="dv">1</span>, <span class="kw">with</span>(df[<span class="kw">tail</span>(ii, <span class="dv">200</span>), ], <span class="kw">eval</span>(expr))))</a></code></pre></div>
 <p>Define features and labels used for phenotyping.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/PhecapData.html">PhecapData</a></span>(</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">  <span class="dt">icd_feature =</span> icd_feature,</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">  <span class="dt">nlp_feature =</span> nlp_feature,</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">  <span class="dt">hu_feature =</span> hu_feature,</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">  <span class="dt">training_label =</span> training_label,</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">  <span class="dt">validation_label =</span> validation_label,</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">  <span class="dt">patient_index =</span> <span class="st">"PatientID"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/PhecapData.html">PhecapData</a></span>(</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">  <span class="dt">icd_feature =</span> icd_feature,</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="dt">nlp_feature =</span> nlp_feature,</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">  <span class="dt">hu_feature =</span> hu_feature,</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">  <span class="dt">training_label =</span> training_label,</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">  <span class="dt">validation_label =</span> validation_label,</a>
+<a class="sourceLine" id="cb9-7" data-line-number="7">  <span class="dt">patient_index =</span> <span class="st">"PatientID"</span>)</a></code></pre></div>
 <p>Specify the surrogate used for surrogate-assisted feature extraction (SAFE). The typical way is to specify a main ICD code, a main NLP CUI, as well as their combination. The default lower_cutoff is 1, and the default upper_cutoff is 10. In some cases one may want to define surrogate through lab test. Feel free to change the cutoffs based on domain knowledge.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">surrogates &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="kw"><a href="../reference/PhecapSurrogate.html">PhecapSurrogate</a></span>(<span class="dt">variable_names =</span> <span class="st">"ICD1"</span>, </a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">                  <span class="dt">lower_cutoff =</span> <span class="dv">1</span>, <span class="dt">upper_cutoff =</span> <span class="dv">10</span>),</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">  <span class="kw"><a href="../reference/PhecapSurrogate.html">PhecapSurrogate</a></span>(<span class="dt">variable_names =</span> <span class="st">"NLP1"</span>, </a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">                  <span class="dt">lower_cutoff =</span> <span class="dv">1</span>, <span class="dt">upper_cutoff =</span> <span class="dv">10</span>),</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">  <span class="kw"><a href="../reference/PhecapSurrogate.html">PhecapSurrogate</a></span>(<span class="dt">variable_names =</span> <span class="kw">c</span>(<span class="st">"ICD1"</span>, <span class="st">"NLP1"</span>), </a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">                  <span class="dt">lower_cutoff =</span> <span class="dv">1</span>, <span class="dt">upper_cutoff =</span> <span class="dv">10</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">surrogates &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">  <span class="kw"><a href="../reference/PhecapSurrogate.html">PhecapSurrogate</a></span>(<span class="dt">variable_names =</span> <span class="st">"ICD1"</span>, </a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">                  <span class="dt">lower_cutoff =</span> <span class="dv">1</span>, <span class="dt">upper_cutoff =</span> <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">  <span class="kw"><a href="../reference/PhecapSurrogate.html">PhecapSurrogate</a></span>(<span class="dt">variable_names =</span> <span class="st">"NLP1"</span>, </a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">                  <span class="dt">lower_cutoff =</span> <span class="dv">1</span>, <span class="dt">upper_cutoff =</span> <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">  <span class="kw"><a href="../reference/PhecapSurrogate.html">PhecapSurrogate</a></span>(<span class="dt">variable_names =</span> <span class="kw">c</span>(<span class="st">"ICD1"</span>, <span class="st">"NLP1"</span>), </a>
+<a class="sourceLine" id="cb10-7" data-line-number="7">                  <span class="dt">lower_cutoff =</span> <span class="dv">1</span>, <span class="dt">upper_cutoff =</span> <span class="dv">10</span>))</a></code></pre></div>
 <p>Run surrogate-assisted feature extraction (SAFE) and show result.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">feature_selected &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_run_feature_extraction.html">phecap_run_feature_extraction</a></span>(data, surrogates)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">feature_selected &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_run_feature_extraction.html">phecap_run_feature_extraction</a></span>(data, surrogates)</a></code></pre></div>
 <pre><code>##             ICD1 NLP1 ICD1&amp;NLP1
 ## NumCases    2155 2754      4946
 ## NumControls 4479 3522      1440
@@ -201,7 +204,7 @@
 ## Subsample 181 
 ## Subsample 191 
 ## Subsample 200</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">print</span>(feature_selected)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">print</span>(feature_selected)</a></code></pre></div>
 <pre><code>## [1] "ICD1" "ICD2" "NLP1" "NLP2" "NLP3"
 ## attr(,"frequency")
 ##       ICD1       ICD2       ICD3       ICD4       NLP1       NLP2 
@@ -211,7 +214,7 @@
 ## attr(,"class")
 ## [1] "PhecapFeatureExtraction"</code></pre>
 <p>Train phenotyping model and show the fitted model, with the AUC on the training set as well as random splits.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_train_phenotyping_model.html">phecap_train_phenotyping_model</a></span>(data, surrogates, feature_selected)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_train_phenotyping_model.html">phecap_train_phenotyping_model</a></span>(data, surrogates, feature_selected)</a></code></pre></div>
 <pre><code>## Split 1 
 ## Split 11 
 ## Split 21 
@@ -233,14 +236,14 @@
 ## Split 181 
 ## Split 191 
 ## Split 200</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># print(model)</span></a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># print(model)</span></a></code></pre></div>
 <p>Validate phenotyping model using validation label, and show the AUC and ROC.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">validation &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_validate_phenotyping_model.html">phecap_validate_phenotyping_model</a></span>(data, surrogates, model)</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co"># print(validation)</span></a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw"><a href="../reference/phecap_plot_roc_curves.html">phecap_plot_roc_curves</a></span>(validation)</a></code></pre></div>
-<p><img src="PheCAP_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">validation &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_validate_phenotyping_model.html">phecap_validate_phenotyping_model</a></span>(data, surrogates, model)</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="co"># print(validation)</span></a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="kw"><a href="../reference/phecap_plot_roc_curves.html">phecap_plot_roc_curves</a></span>(validation)</a></code></pre></div>
+<p><img src="PheCAP_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
 <p>Apply the model to all the patients to obtain predicted phenotype.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">phenotype &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_predict_phenotype.html">phecap_predict_phenotype</a></span>(data, surrogates, model)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">phenotype &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_predict_phenotype.html">phecap_predict_phenotype</a></span>(data, surrogates, model)</a></code></pre></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -250,7 +253,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Yichi Zhang, Ming Yang, Tianxi Cai.</p>
+  <p>Developed by Yichi Zhang.</p>
 </div>
 
 <div class="pkgdown">
