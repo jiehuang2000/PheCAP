@@ -1,5 +1,5 @@
 ---
-title: "Introduction to PheCAP"
+title: "Simulated Data"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{PheCAP}
@@ -10,8 +10,6 @@ vignette: >
 ```{r}
 library(PheCAP)
 ```
-
-Generate simulated data.
 
 ```{r}
 set.seed(123)
