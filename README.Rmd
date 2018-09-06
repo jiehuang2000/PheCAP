@@ -3,7 +3,7 @@ __High-Throughput Phenotyping with Electronic Health Records using a Common Auto
 ## Overview
 
 Implement surrogate-assisted feature extraction (SAFE) and common machine learning approaches to train and validate phenotyping models. Background and details about the methods can be found at 
-[Yu et al. (2017)](https://doi.org/10.1093/jamia/ocw135) and [Liao et al. (2015)](https://doi.org/10.1093/jamia/ocw135).
+[Yu et al. (2017)](https://doi.org/10.1093/jamia/ocw135) and [Liao et al. (2015)](https://doi.org/10.1136/bmj.h1885).
 
 ## Installation
 
