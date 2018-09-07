@@ -614,12 +614,6 @@
 <a class="sourceLine" id="cb20-2" data-line-number="2"><span class="co"># Error in approxfun(x, y, method = "constant", rule = 2L) : </span></a>
 <a class="sourceLine" id="cb20-3" data-line-number="3"><span class="co">#   zero non-NA points</span></a>
 <a class="sourceLine" id="cb20-4" data-line-number="4"><span class="co"># print(model)</span></a></code></pre></div>
-<p>Validate phenotyping model using validation label, and show the AUC and ROC.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">validation &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_validate_phenotyping_model.html">phecap_validate_phenotyping_model</a></span>(data, surrogates, model)</a>
-<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="co"># print(validation)</span></a>
-<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="kw"><a href="../reference/phecap_plot_roc_curves.html">phecap_plot_roc_curves</a></span>(validation)</a></code></pre></div>
-<p>Apply the model to all the patients to obtain predicted phenotype.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">phenotype &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_predict_phenotype.html">phecap_predict_phenotype</a></span>(data, surrogates, model)</a></code></pre></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

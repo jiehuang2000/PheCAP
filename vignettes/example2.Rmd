@@ -124,18 +124,3 @@ model <- phecap_train_phenotyping_model(data, surrogates, feature_selected)
 #   zero non-NA points
 # print(model)
 ```
-
-Validate phenotyping model using validation label, and show the AUC and ROC.
-
-```{r, eval=FALSE}
-validation <- phecap_validate_phenotyping_model(data, surrogates, model)
-# print(validation)
-phecap_plot_roc_curves(validation)
-```
-
-Apply the model to all the patients to obtain predicted phenotype.
-
-```{r, eval=FALSE}
-phenotype <- phecap_predict_phenotype(data, surrogates, model)
-```
-
