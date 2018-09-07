@@ -120,6 +120,8 @@ Train phenotyping model and show the fitted model, with the AUC on the training 
 
 ```{r, eval=FALSE}
 model <- phecap_train_phenotyping_model(data, surrogates, feature_selected)
+# Error in approxfun(x, y, method = "constant", rule = 2L) : 
+#   zero non-NA points
 # print(model)
 ```
 
