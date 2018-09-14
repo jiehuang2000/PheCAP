@@ -4,41 +4,56 @@
 \alias{PhecapData}
 \title{Define or Read Datasets for Phenotyping}
 \usage{
-PhecapData(icd_feature, nlp_feature, hu_feature, training_label = NULL,
-  validation_label = NULL, patient_index = "PatientID",
-  feature_transformation = log1p)
+PhecapData(
+data, hu_feature, label, validation,
+patient_id = NULL, seed = 12300L, feature_transformation = log1p)
 }
 \arguments{
-\item{icd_feature}{a character scalar of the path of ICD feature, 
-or a data.frame of the actual ICD feature.}
+\item{data}{A data.frame consisting of all the variables needed for phenotyping,
+or a character scalar of the path to the data,
+or a list consisting of either character scalar or data.frame.
+If a list is given, patient_id cannot be NULL.
+All the datasets in the list will be joined into a single dataset
+according to the columns specified by patient_id.}
 
-\item{nlp_feature}{a character scalar of the path of NLP feature, 
-or a data.frame of the actual NLP feature.}
+\item{hu_feature}{A character scalar or vector specifying the names of
+one of more healthcare utilization (HU) variables.
+There variables are always included in the phenotyping model.}
 
-\item{hu_feature}{a character scalar of the path of HU feature, 
-or a data.frame of the actual HU feature. One may also include other 
-variables that must be included in the model.}
+\item{label}{A character scalar of the column name that gives the phenotype status
+(1 or TRUE: present, 0 or FALSE: absent).
+If label is not ready yet, just put a column filled with NA in data.
+In such cases only the feature extraction step can be done.}
 
-\item{training_label}{a character scalar of the path of training label, 
-or a data.frame of the actual training label, or NULL.}
+\item{validation}{A character scalar, a real number strictly between 0 and 1,
+or an integer not less than 2.
+If a character scalar is used, it is treated as the column name
+in the data that specifies whether this observation
+belongs to the validation samples
+(1 or TRUE: validation, 0 or FALSE: training).
+If a real number strictly between 0 and 1 is used, it is treated as
+the proportion of the validation samples. The actual validation samples
+will be drawn from all labeled samples.
+If an integer not less than 2 is used, it is treated as
+the size of the validation samples. The actual validation samples
+will be drawn from all labeled samples.}
 
-\item{validation_label}{a character scalar of the path of validation label, 
-or a data.frame of the actual validation label, or NULL.}
+\item{patient_id}{A character vector for the column names, if any, that uniquely identifies
+each patient. Such variables must appear in the data.
+patient_id can be NULL if such fields are not contained in the data.}
 
-\item{patient_index}{a character scalar or vector that specify a unique identifier 
-for each patient in the data. Such variable(s) must appear in all the dataset above.}
+\item{seed}{If validation samples need to be drawn from all labeled samples,
+seed specifies the random seed for sampling.}
 
-\item{feature_transformation}{a function that will be applied to all the features. 
-Since count data are typically right-skewed, by default \code{log1p} will be used.}
+\item{feature_transformation}{A function that will be applied to all the features.
+Since count data are typically right-skewed,
+by default \code{log1p} will be used.
+feature_transformation can be NULL, in which case
+no transformation will be done on any of the feature.}
 }
 \value{
 An object of class \code{PhecapData}.
 }
 \description{
 Specify the data to be used for phenotyping.
-}
-\details{
-Note that icd_feature, nlp_feature and hu_feature cannot be NULL, while training_label
-can be NULL if only feature extraction is needed, and validation_label can be NULL 
-if only feature extraction and model training is needed.
 }

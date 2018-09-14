@@ -25,9 +25,9 @@ fit_lasso_cv <- function(
   if (!is.matrix(y) && length(unique(y)) > 2L) {
     y <- cbind(1.0 - y, y)
   }
-  penalty_weight <- pmin(pmax(penalty_weight, 1e-3), 1e3)
+  penalty_weight <- pmin(pmax(penalty_weight, 1e-4), 1e4)
   model <- cv.glmnet(
-    x, y, family = "binomial", thresh = 1e-6,
+    x, y, family = "binomial", thresh = 5e-7,
     penalty.factor = penalty_weight, 
     nlambda = 50L, lambda.min.ratio = 5e-3)
   as.double(coef(model, s = "lambda.min"))
@@ -49,9 +49,9 @@ fit_lasso_bic <- function(
   if (!is.matrix(y) && length(unique(y)) > 2L) {
     y <- cbind(1.0 - y, y)
   }
-  penalty_weight <- pmin(pmax(penalty_weight, 1e-3), 1e3)
+  penalty_weight <- pmin(pmax(penalty_weight, 1e-4), 1e4)
   model <- glmnet(
-    x, y, family = "binomial", thresh = 1e-6,
+    x, y, family = "binomial", thresh = 5e-7,
     penalty.factor = penalty_weight, 
     nlambda = 50L, lambda.min.ratio = 5e-3)
   n <- length(y)
@@ -134,11 +134,11 @@ get_roc <- function(
   t0 <- n - t1
   p1 <- seq_len(n)
   p0 <- n - p1
-
+  
   true_positive <- cumsum(y_true)
   false_positive <- p1 - true_positive
   true_negative <- t0 - false_positive
-
+  
   thr <- y_score
   pct <- p1 / n
   acc <- (true_positive + true_negative) / n
@@ -150,13 +150,13 @@ get_roc <- function(
   ppv <- true_positive / p1
   fdr <- false_positive / p1
   npv <- true_negative / p0
-
+  
   sen <- tpr
   rec <- tpr
   spec <- tnr
   prec <- ppv
   f1 <- prec * rec / (prec + rec)
-
+  
   i <- which(diff(thr) < -tol)
   df <- data.frame(
     thr = thr[i], 
@@ -213,8 +213,9 @@ get_roc_auc_with_splits <- function(
   x, y, penalty_weight = NULL, 
   method = "lasso_bic", 
   train_percent = 0.7, num_splits = 200L, 
-  start_seed = 12345L, verbose = 10L)
+  start_seed = 1L, verbose = 50L)
 {
+  old_random_state <- .Random.seed
   if (!is.matrix(x)) {
     x <- as.matrix(x)
   }
@@ -248,17 +249,18 @@ get_roc_auc_with_splits <- function(
   } else {
     stop("Unrecognize specification for method")
   }
-
+  
   train_beta <- fit_function(x, y, penalty_weight)
   train_prob <- predict_function(train_beta, x)
   train_roc <- get_roc(y, train_prob)
   train_auc <- get_auc(y, train_prob)
-
+  
   split_roc <- vector("list", num_splits)
   split_auc <- vector("list", num_splits)
   for(sp in seq_len(num_splits)) {
-    if (verbose > 0L && (sp %% verbose == 1L || sp == num_splits)) {
-      cat("Split", sp, "\n")
+    if (verbose > 0L && (sp %% verbose == 0L || 
+                         sp == 1L || sp == num_splits)) {
+      cat(sprintf("Split %d/%d\n", sp, num_splits))
     }
     set.seed(start_seed + sp)
     i_train <- sort.int(sample.int(n_total, n_train, FALSE))
@@ -272,8 +274,9 @@ get_roc_auc_with_splits <- function(
   }
   split_roc <- Reduce(`+`, split_roc) / num_splits
   split_auc <- Reduce(`+`, split_auc) / num_splits
-
-  list(model = train_beta, method = method,
+  
+  .Random.seed <- old_random_state
+  list(coefficients = train_beta, method = method,
        fit_function = fit_function,
        predict_function = predict_function,
        train_roc = train_roc, train_auc = train_auc,

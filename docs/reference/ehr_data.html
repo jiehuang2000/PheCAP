@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Define or Read Datasets for Phenotyping — PhecapData • PheCAP</title>
+<title>A Synthetic EHR Dataset — ehr_data • PheCAP</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,12 @@
 
 
 
-<meta property="og:title" content="Define or Read Datasets for Phenotyping — PhecapData" />
+<meta property="og:title" content="A Synthetic EHR Dataset — ehr_data" />
 
-<meta property="og:description" content="Specify the data to be used for phenotyping." />
+<meta property="og:description" content="This dataset gives a sample dataset for EHR phenotyping.
+It contains counts for ICD codes, counts for NLP mentions,
+healthcare utilization (HU) features for all observations.
+It also contains the accurate phenotypes for 181 observations." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -112,94 +115,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Define or Read Datasets for Phenotyping</h1>
-    <small class="dont-index">Source: <a href='https://github.com/parse-health/PheCAP/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
-    <div class="hidden name"><code>PhecapData.Rd</code></div>
+    <h1>A Synthetic EHR Dataset</h1>
+    <small class="dont-index">Source: <a href='https://github.com/parse-health/PheCAP/blob/master/R/data.R'><code>R/data.R</code></a></small>
+    <div class="hidden name"><code>ehr_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Specify the data to be used for phenotyping.</p>
+    <p>This dataset gives a sample dataset for EHR phenotyping.
+It contains counts for ICD codes, counts for NLP mentions,
+healthcare utilization (HU) features for all observations.
+It also contains the accurate phenotypes for 181 observations.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>PhecapData</span>(
-<span class='no'>data</span>, <span class='no'>hu_feature</span>, <span class='no'>label</span>, <span class='no'>validation</span>,
-<span class='kw'>patient_id</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>12300L</span>, <span class='kw'>feature_transformation</span> <span class='kw'>=</span> <span class='no'>log1p</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>data</th>
-      <td><p>A data.frame consisting of all the variables needed for phenotyping,
-or a character scalar of the path to the data,
-or a list consisting of either character scalar or data.frame.
-If a list is given, patient_id cannot be NULL.
-All the datasets in the list will be joined into a single dataset
-according to the columns specified by patient_id.</p></td>
-    </tr>
-    <tr>
-      <th>hu_feature</th>
-      <td><p>A character scalar or vector specifying the names of
-one of more healthcare utilization (HU) variables.
-There variables are always included in the phenotyping model.</p></td>
-    </tr>
-    <tr>
-      <th>label</th>
-      <td><p>A character scalar of the column name that gives the phenotype status
-(1 or TRUE: present, 0 or FALSE: absent).
-If label is not ready yet, just put a column filled with NA in data.
-In such cases only the feature extraction step can be done.</p></td>
-    </tr>
-    <tr>
-      <th>validation</th>
-      <td><p>A character scalar, a real number strictly between 0 and 1,
-or an integer not less than 2.
-If a character scalar is used, it is treated as the column name
-in the data that specifies whether this observation
-belongs to the validation samples
-(1 or TRUE: validation, 0 or FALSE: training).
-If a real number strictly between 0 and 1 is used, it is treated as
-the proportion of the validation samples. The actual validation samples
-will be drawn from all labeled samples.
-If an integer not less than 2 is used, it is treated as
-the size of the validation samples. The actual validation samples
-will be drawn from all labeled samples.</p></td>
-    </tr>
-    <tr>
-      <th>patient_id</th>
-      <td><p>A character vector for the column names, if any, that uniquely identifies
-each patient. Such variables must appear in the data.
-patient_id can be NULL if such fields are not contained in the data.</p></td>
-    </tr>
-    <tr>
-      <th>seed</th>
-      <td><p>If validation samples need to be drawn from all labeled samples,
-seed specifies the random seed for sampling.</p></td>
-    </tr>
-    <tr>
-      <th>feature_transformation</th>
-      <td><p>A function that will be applied to all the features.
-Since count data are typically right-skewed,
-by default <code>log1p</code> will be used.
-feature_transformation can be NULL, in which case
-no transformation will be done on any of the feature.</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <pre class="usage"><span class='fu'>data</span>(<span class='no'>ehr_data</span>)</pre>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>An object of class <code>PhecapData</code>.</p>
+    <p>A data.frame with 10000 observations of 588 variables.</p>
     
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
+      <li><a href="#format">Format</a></li>
           </ul>
 
   </div>

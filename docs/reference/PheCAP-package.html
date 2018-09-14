@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Phenotyping with EHR using CAP — PheCAP-package • PheCAP</title>
+<title>High-Throughput Phenotyping with Electronic Health Records 
+using a Common Automated Pipeline — PheCAP-package • PheCAP</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +31,13 @@
 
 
 
-<meta property="og:title" content="Phenotyping with EHR using CAP — PheCAP-package" />
+<meta property="og:title" content="High-Throughput Phenotyping with Electronic Health Records 
+using a Common Automated Pipeline — PheCAP-package" />
 
-<meta property="og:description" content="Phenotyping with Eletronic Health Records using a Common Automated Pipeline" />
+<meta property="og:description" content="Implement surrogate-assisted feature extraction (SAFE) and common 
+machine learning approaches to train and validate phenotyping models.
+Background and details about the methods can be found at 
+&amp;lt;doi:10.1093/jamia/ocw135&amp;gt; and &amp;lt;doi:10.1136/bmj.h1885&amp;gt;." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -71,10 +76,22 @@
   <a href="../index.html">Home</a>
 </li>
 <li>
-  <a href="../articles/main-steps.html">Main Steps</a>
+  <a href="../articles/PheCAP.html">Get Started</a>
 </li>
-<li>
-  <a href="../articles/sim-data.html">Example</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Examples
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/ex1-sim.html">Simulated Data</a>
+    </li>
+    <li>
+      <a href="../articles/ex2-ehr.html">Real EHR Data</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -100,27 +117,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Phenotyping with EHR using CAP</h1>
+    <h1>High-Throughput Phenotyping with Electronic Health Records 
+using a Common Automated Pipeline</h1>
     <small class="dont-index">Source: <a href='https://github.com/parse-health/PheCAP/blob/master/R/package.R'><code>R/package.R</code></a></small>
     <div class="hidden name"><code>PheCAP-package.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Phenotyping with Eletronic Health Records using a Common Automated Pipeline</p>
+    <p>Implement surrogate-assisted feature extraction (SAFE) and common 
+machine learning approaches to train and validate phenotyping models.
+Background and details about the methods can be found at 
+&lt;doi:10.1093/jamia/ocw135&gt; and &lt;doi:10.1136/bmj.h1885&gt;.</p>
     
     </div>
 
         
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>PheCAP provides a straightforward interface for conducting phenotyping on 
-eletronic health records. One can specify the data via <code><a href='PhecapData.html'>PhecapData</a></code>, 
-define surrogate using <code><a href='PhecapSurrogate.html'>PhecapSurrogate</a></code>. Next, one may run surrogate-assisted 
-feature extraction (SAFE) by calling <code><a href='phecap_run_feature_extraction.html'>phecap_run_feature_extraction</a></code>, and then 
-train and validate phenotyping models via <code><a href='phecap_train_phenotyping_model.html'>phecap_train_phenotyping_model</a></code> and
-<code><a href='phecap_validate_phenotyping_model.html'>phecap_validate_phenotyping_model</a></code>. The predictive performance can be 
-visualized using <code><a href='phecap_plot_roc_curves.html'>phecap_plot_roc_curves</a></code>. Predicted phenotype is provided by 
+    <p>PheCAP provides a straightforward interface for conducting
+phenotyping on eletronic health records. One can specify the
+data via <code><a href='PhecapData.html'>PhecapData</a></code>, define surrogate using
+<code><a href='PhecapSurrogate.html'>PhecapSurrogate</a></code>. Next, one may run
+surrogate-assisted feature extraction (SAFE) by calling
+<code><a href='phecap_run_feature_extraction.html'>phecap_run_feature_extraction</a></code>, and then
+train and validate phenotyping models via
+<code><a href='phecap_train_phenotyping_model.html'>phecap_train_phenotyping_model</a></code> and
+<code><a href='phecap_validate_phenotyping_model.html'>phecap_validate_phenotyping_model</a></code>.
+The predictive performance can be visualized using
+<code><a href='phecap_plot_roc_curves.html'>phecap_plot_roc_curves</a></code>.
+Predicted phenotype is provided by
 <code><a href='phecap_predict_phenotype.html'>phecap_predict_phenotype</a></code>.</p>
     
 

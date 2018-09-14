@@ -4,16 +4,13 @@
 \alias{phecap_validate_phenotyping_model}
 \title{Validate the Phenotyping Model using the Validation Labels}
 \usage{
-phecap_validate_phenotyping_model(data, surrogates, model)
+phecap_validate_phenotyping_model(data, model)
 }
 \arguments{
 \item{data}{an object of class \code{PhecapData}, 
 obtained by calling \code{PhecapData(...)}}
 
-\item{surrogates}{a list of objects of class \code{PhecapSurrogate}, obtained by 
-something like \code{list(PhecapSurrogate(...), PhecapSurrogate(...))}.}
-
-\item{model}{an object of class \code{PhecapModel}, obtained by calling 
+\item{model}{an object of class \code{PhecapModel}, obtained by calling
 \code{phecap_train_phenotyping_model}.}
 }
 \value{

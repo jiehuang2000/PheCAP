@@ -2,7 +2,7 @@ pandoc: 2.2.3.2
 pkgdown: 1.1.0
 pkgdown_sha: ~
 articles:
-  example2: example2.html
-  main-steps: main-steps.html
-  sim-data: sim-data.html
+  PheCAP: PheCAP.html
+  ex1-sim: ex1-sim.html
+  ex2-ehr: ex2-ehr.html
 

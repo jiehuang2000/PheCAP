@@ -2,25 +2,27 @@
 % Please edit documentation in R/utils.R
 \name{PhecapSurrogate}
 \alias{PhecapSurrogate}
-\title{Define a Surrogate Variable used in Surrogate-Assisted Feature Extraction (SAFE)}
+\title{Define a Surrogate Variable used inSurrogate-Assisted Feature Extraction (SAFE)}
 \usage{
 PhecapSurrogate(variable_names, lower_cutoff = 1L, upper_cutoff = 10L)
 }
 \arguments{
-\item{variable_names}{a character scalar or vector consisting of variable names. If a vector is given, 
-the value of the surrogate is defined as the sum of the values of each variable.}
+\item{variable_names}{a character scalar or vector consisting of variable names.
+If a vector is given, the value of the surrogate is defined as the sum of
+the values of each variable.}
 
-\item{lower_cutoff}{a numeric scalar. If the surrogate value of a patient is less than or equal to 
-this cutoff, then this patient is treated as a control in SAFE.}
+\item{lower_cutoff}{a numeric scalar. If the surrogate value of a patient is less than 
+or equal to this cutoff, then this patient is treated as a control in SAFE.}
 
-\item{upper_cutoff}{a numeric scalar. If the surrogate value of a patient is greater than or equal to 
-this cutoff, then this patient is treated as a case in SAFE.}
+\item{upper_cutoff}{a numeric scalar. If the surrogate value of a patient is greater than 
+or equal to this cutoff, then this patient is treated as a case in SAFE.}
 }
 \value{
 An object of class \code{PhecapSurrogate}.
 }
 \description{
-Define a surrogate varible from existing features, and specify associated lower and upper cutoffs.
+Define a surrogate varible from existing features, and specify
+associated lower and upper cutoffs.
 }
 \details{
 This function only stores the definition. No calculation is done.

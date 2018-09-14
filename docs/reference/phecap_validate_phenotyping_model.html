@@ -72,10 +72,22 @@ and measure the prediction accuracy via ROC and AUC." />
   <a href="../index.html">Home</a>
 </li>
 <li>
-  <a href="../articles/main-steps.html">Main Steps</a>
+  <a href="../articles/PheCAP.html">Get Started</a>
 </li>
-<li>
-  <a href="../articles/sim-data.html">Example</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Examples
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/ex1-sim.html">Simulated Data</a>
+    </li>
+    <li>
+      <a href="../articles/ex2-ehr.html">Real EHR Data</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -113,7 +125,7 @@ and measure the prediction accuracy via ROC and AUC.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>phecap_validate_phenotyping_model</span>(<span class='no'>data</span>, <span class='no'>surrogates</span>, <span class='no'>model</span>)</pre>
+    <pre class="usage"><span class='fu'>phecap_validate_phenotyping_model</span>(<span class='no'>data</span>, <span class='no'>model</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -124,13 +136,8 @@ and measure the prediction accuracy via ROC and AUC.</p>
 obtained by calling <code><a href='PhecapData.html'>PhecapData(...)</a></code></p></td>
     </tr>
     <tr>
-      <th>surrogates</th>
-      <td><p>a list of objects of class <code>PhecapSurrogate</code>, obtained by 
-something like <code>list(PhecapSurrogate(...), PhecapSurrogate(...))</code>.</p></td>
-    </tr>
-    <tr>
       <th>model</th>
-      <td><p>an object of class <code>PhecapModel</code>, obtained by calling 
+      <td><p>an object of class <code>PhecapModel</code>, obtained by calling
 <code>phecap_train_phenotyping_model</code>.</p></td>
     </tr>
     </table>

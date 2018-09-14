@@ -32,7 +32,8 @@
 
 <meta property="og:title" content="Predict Phenotype — phecap_predict_phenotype" />
 
-<meta property="og:description" content="Compute predicted probability of having the phenotype for each patient in the dataset." />
+<meta property="og:description" content="Compute predicted probability of having the phenotype
+for each patient in the dataset." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -71,10 +72,22 @@
   <a href="../index.html">Home</a>
 </li>
 <li>
-  <a href="../articles/main-steps.html">Main Steps</a>
+  <a href="../articles/PheCAP.html">Get Started</a>
 </li>
-<li>
-  <a href="../articles/sim-data.html">Example</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Examples
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/ex1-sim.html">Simulated Data</a>
+    </li>
+    <li>
+      <a href="../articles/ex2-ehr.html">Real EHR Data</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -107,11 +120,12 @@
 
     <div class="ref-description">
     
-    <p>Compute predicted probability of having the phenotype for each patient in the dataset.</p>
+    <p>Compute predicted probability of having the phenotype
+for each patient in the dataset.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>phecap_predict_phenotype</span>(<span class='no'>data</span>, <span class='no'>surrogates</span>, <span class='no'>model</span>)</pre>
+    <pre class="usage"><span class='fu'>phecap_predict_phenotype</span>(<span class='no'>data</span>, <span class='no'>model</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -121,13 +135,8 @@
       <td><p>an object of class <code>PhecapData</code>, obtained by calling <code><a href='PhecapData.html'>PhecapData(...)</a></code>.</p></td>
     </tr>
     <tr>
-      <th>surrogates</th>
-      <td><p>a list of objects of class <code>PhecapSurrogate</code>, obtained by something like
-<code>list(PhecapSurrogate(...), PhecapSurrogate(...))</code>.</p></td>
-    </tr>
-    <tr>
       <th>model</th>
-      <td><p>an object of class <code>PhecapModel</code>, probably returned from 
+      <td><p>an object of class <code>PhecapModel</code>, probably returned from
 <code>phecap_train_phenotyping_model</code>.</p></td>
     </tr>
     </table>
@@ -135,8 +144,8 @@
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>data.frame</code> with two columns:</p>
-<dt>patient_index</dt><dd><p>patient identifier,</p></dd> 
-<dt>prediction</dt><dd><p>predicted phenotype.</p></dd>
+<dt>patient_index</dt><dd><p>patient identifier</p></dd>,
+<dt>prediction</dt><dd><p>predicted phenotype</p></dd>.
 
     
 

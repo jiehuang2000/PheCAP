@@ -4,9 +4,10 @@
 \alias{phecap_run_feature_extraction}
 \title{Run Surrogate-Assisted Feature Extraction (SAFE)}
 \usage{
-phecap_run_feature_extraction(data, surrogates,
+phecap_run_feature_extraction(
+data, surrogates,
 subsample_size = 1000L, num_subsamples = 200L,
-start_seed = 123L, verbose = 10L)
+start_seed = 45600L, verbose = 50L)
 }
 \arguments{
 \item{data}{An object of class PhecapData, obtained by calling PhecapData(...)}
@@ -32,6 +33,6 @@ among all subsamples for each variable.
 Run surrogate-assisted feature extraction (SAFE) using unlabeled data and subsampling.
 }
 \details{
-In this unlabeled setting, the extremes of each surrogate are used to define cases and controls.
-The variables selected are those selected in at least half of the subsamples.
+In this unlabeled setting, the extremes of each surrogate are used to define cases and 
+controls. The variables selected are those selected in at least half of the subsamples.
 }

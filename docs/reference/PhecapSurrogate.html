@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Define a Surrogate Variable used in Surrogate-Assisted Feature Extraction (SAFE) — PhecapSurrogate • PheCAP</title>
+<title>Define a Surrogate Variable used inSurrogate-Assisted Feature Extraction (SAFE) — PhecapSurrogate • PheCAP</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Define a Surrogate Variable used in Surrogate-Assisted Feature Extraction (SAFE) — PhecapSurrogate" />
+<meta property="og:title" content="Define a Surrogate Variable used inSurrogate-Assisted Feature Extraction (SAFE) — PhecapSurrogate" />
 
-<meta property="og:description" content="Define a surrogate varible from existing features, and specify associated lower and upper cutoffs." />
+<meta property="og:description" content="Define a surrogate varible from existing features, and specify
+associated lower and upper cutoffs." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -71,10 +72,22 @@
   <a href="../index.html">Home</a>
 </li>
 <li>
-  <a href="../articles/main-steps.html">Main Steps</a>
+  <a href="../articles/PheCAP.html">Get Started</a>
 </li>
-<li>
-  <a href="../articles/sim-data.html">Example</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Examples
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/ex1-sim.html">Simulated Data</a>
+    </li>
+    <li>
+      <a href="../articles/ex2-ehr.html">Real EHR Data</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -100,14 +113,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Define a Surrogate Variable used in Surrogate-Assisted Feature Extraction (SAFE)</h1>
+    <h1>Define a Surrogate Variable used inSurrogate-Assisted Feature Extraction (SAFE)</h1>
     <small class="dont-index">Source: <a href='https://github.com/parse-health/PheCAP/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
     <div class="hidden name"><code>PhecapSurrogate.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Define a surrogate varible from existing features, and specify associated lower and upper cutoffs.</p>
+    <p>Define a surrogate varible from existing features, and specify
+associated lower and upper cutoffs.</p>
     
     </div>
 
@@ -118,18 +132,19 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>variable_names</th>
-      <td><p>a character scalar or vector consisting of variable names. If a vector is given, 
-the value of the surrogate is defined as the sum of the values of each variable.</p></td>
+      <td><p>a character scalar or vector consisting of variable names.
+If a vector is given, the value of the surrogate is defined as the sum of
+the values of each variable.</p></td>
     </tr>
     <tr>
       <th>lower_cutoff</th>
-      <td><p>a numeric scalar. If the surrogate value of a patient is less than or equal to 
-this cutoff, then this patient is treated as a control in SAFE.</p></td>
+      <td><p>a numeric scalar. If the surrogate value of a patient is less than 
+or equal to this cutoff, then this patient is treated as a control in SAFE.</p></td>
     </tr>
     <tr>
       <th>upper_cutoff</th>
-      <td><p>a numeric scalar. If the surrogate value of a patient is greater than or equal to 
-this cutoff, then this patient is treated as a case in SAFE.</p></td>
+      <td><p>a numeric scalar. If the surrogate value of a patient is greater than 
+or equal to this cutoff, then this patient is treated as a case in SAFE.</p></td>
     </tr>
     </table>
     

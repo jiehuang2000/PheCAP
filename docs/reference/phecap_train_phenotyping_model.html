@@ -32,8 +32,8 @@
 
 <meta property="og:title" content="Train Phenotyping Model using the Training Labels — phecap_train_phenotyping_model" />
 
-<meta property="og:description" content="Train the phenotyping model on the training dataset, and evaluate 
-its performance via random splits of the training dataset." />
+<meta property="og:description" content="Train the phenotyping model on the training dataset,
+and evaluate its performance via random splits of the training dataset." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -72,10 +72,22 @@ its performance via random splits of the training dataset." />
   <a href="../index.html">Home</a>
 </li>
 <li>
-  <a href="../articles/main-steps.html">Main Steps</a>
+  <a href="../articles/PheCAP.html">Get Started</a>
 </li>
-<li>
-  <a href="../articles/sim-data.html">Example</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Examples
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/ex1-sim.html">Simulated Data</a>
+    </li>
+    <li>
+      <a href="../articles/ex2-ehr.html">Real EHR Data</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -108,28 +120,28 @@ its performance via random splits of the training dataset." />
 
     <div class="ref-description">
     
-    <p>Train the phenotyping model on the training dataset, and evaluate 
-its performance via random splits of the training dataset.</p>
+    <p>Train the phenotyping model on the training dataset,
+and evaluate its performance via random splits of the training dataset.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>phecap_train_phenotyping_model</span>(
 <span class='no'>data</span>, <span class='no'>surrogates</span>, <span class='no'>feature_selected</span>,
-<span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"lasso_bic"</span>, <span class='kw'>train_percent</span> <span class='kw'>=</span> <span class='fl'>0.7</span>,
-<span class='kw'>num_splits</span> <span class='kw'>=</span> <span class='fl'>200L</span>, <span class='kw'>start_seed</span> <span class='kw'>=</span> <span class='fl'>12345L</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>10L</span>)</pre>
+<span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"lasso_bic"</span>, <span class='kw'>train_percent</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>num_splits</span> <span class='kw'>=</span> <span class='fl'>200L</span>,
+<span class='kw'>start_seed</span> <span class='kw'>=</span> <span class='fl'>78900L</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>50L</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>an object of class <code>PhecapData</code>, obtained by 
-calling <code><a href='PhecapData.html'>PhecapData(...)</a></code>.</p></td>
+      <td><p>an object of class <code>PhecapData</code>, 
+obtained by calling <code><a href='PhecapData.html'>PhecapData(...)</a></code>.</p></td>
     </tr>
     <tr>
       <th>surrogates</th>
-      <td><p>a list of objects of class <code>PhecapSurrogate</code>, obtained 
-by something like <code>list(PhecapSurrogate(...), PhecapSurrogate(...))</code>.</p></td>
+      <td><p>a list of objects of class <code>PhecapSurrogate</code>, obtained by 
+something like <code>list(PhecapSurrogate(...), PhecapSurrogate(...))</code>.</p></td>
     </tr>
     <tr>
       <th>feature_selected</th>
@@ -151,8 +163,8 @@ If a list is used, it should contain two named components:
     </tr>
     <tr>
       <th>train_percent</th>
-      <td><p>The percentage (between 0 and 1) of labels that are used for model 
-training during random splits</p></td>
+      <td><p>The percentage (between 0 and 1) of labels that are used for 
+model training during random splits</p></td>
     </tr>
     <tr>
       <th>num_splits</th>
@@ -172,7 +184,7 @@ or remain quiet if verbose is zero</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of class <code>PhecapModel</code>, with components</p>
-<dt>model</dt><dd><p>the fitted model</p></dd>
+<dt>coefficients</dt><dd><p>the fitted object</p></dd>
 <dt>method</dt><dd><p>the method used for model training</p></dd>
 <dt>feature_selected</dt><dd><p>the feature selected by SAFE</p></dd>
 <dt>train_roc</dt><dd><p>ROC on training dataset</p></dd>

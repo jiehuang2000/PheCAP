@@ -6,15 +6,15 @@
 \usage{
 phecap_train_phenotyping_model(
 data, surrogates, feature_selected,
-method = "lasso_bic", train_percent = 0.7,
-num_splits = 200L, start_seed = 12345L, verbose = 10L)
+method = "lasso_bic", train_percent = 0.7, num_splits = 200L,
+start_seed = 78900L, verbose = 50L)
 }
 \arguments{
-\item{data}{an object of class \code{PhecapData}, obtained by 
-calling \code{PhecapData(...)}.}
+\item{data}{an object of class \code{PhecapData}, 
+obtained by calling \code{PhecapData(...)}.}
 
-\item{surrogates}{a list of objects of class \code{PhecapSurrogate}, obtained 
-by something like \code{list(PhecapSurrogate(...), PhecapSurrogate(...))}.}
+\item{surrogates}{a list of objects of class \code{PhecapSurrogate}, obtained by 
+something like \code{list(PhecapSurrogate(...), PhecapSurrogate(...))}.}
 
 \item{feature_selected}{a character vector of the features that should be included 
 in the model, probably returned by \code{phecap_run_feature_extraction}.}
@@ -30,8 +30,8 @@ If a list is used, it should contain two named components:
 \code{fit} --- a function for model fitting, and
 \code{predict} ---- a function for prediction.}
 
-\item{train_percent}{The percentage (between 0 and 1) of labels that are used for model 
-training during random splits}
+\item{train_percent}{The percentage (between 0 and 1) of labels that are used for 
+model training during random splits}
 
 \item{num_splits}{The number of random splits.}
 
@@ -42,7 +42,7 @@ or remain quiet if verbose is zero}
 }
 \value{
 An object of class \code{PhecapModel}, with components
-\item{model}{the fitted model}
+\item{coefficients}{the fitted object}
 \item{method}{the method used for model training}
 \item{feature_selected}{the feature selected by SAFE}
 \item{train_roc}{ROC on training dataset}
@@ -53,6 +53,6 @@ An object of class \code{PhecapModel}, with components
 \item{predict_function}{the function used for prediction}
 }
 \description{
-Train the phenotyping model on the training dataset, and evaluate 
-its performance via random splits of the training dataset.
+Train the phenotyping model on the training dataset,
+and evaluate its performance via random splits of the training dataset.
 }

@@ -4,22 +4,20 @@
 \alias{phecap_predict_phenotype}
 \title{Predict Phenotype}
 \usage{
-phecap_predict_phenotype(data, surrogates, model)
+phecap_predict_phenotype(data, model)
 }
 \arguments{
 \item{data}{an object of class \code{PhecapData}, obtained by calling \code{PhecapData(...)}.}
 
-\item{surrogates}{a list of objects of class \code{PhecapSurrogate}, obtained by something like
-\code{list(PhecapSurrogate(...), PhecapSurrogate(...))}.}
-
-\item{model}{an object of class \code{PhecapModel}, probably returned from 
+\item{model}{an object of class \code{PhecapModel}, probably returned from
 \code{phecap_train_phenotyping_model}.}
 }
 \value{
-A \code{data.frame} with two columns: 
-\item{patient_index}{patient identifier,} 
-\item{prediction}{predicted phenotype.}
+A \code{data.frame} with two columns:
+\item{patient_index}{patient identifier},
+\item{prediction}{predicted phenotype}.
 }
 \description{
-Compute predicted probability of having the phenotype for each patient in the dataset.
+Compute predicted probability of having the phenotype
+for each patient in the dataset.
 }

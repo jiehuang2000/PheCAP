@@ -4,13 +4,15 @@
 \alias{phecap_plot_roc_curves}
 \title{Plot ROC and Related Curves for Phenotyping Models}
 \usage{
-phecap_plot_roc_curves(x, axis_x = "1 - spec", axis_y = "sen",
-what = c("training", "random-splits", "validation"), ggplot = TRUE, ...)
+phecap_plot_roc_curves(
+x, axis_x = "1 - spec", axis_y = "sen",
+what = c("training", "random-splits", "validation"),
+ggplot = TRUE, ...)
 }
 \arguments{
-\item{x}{either a single object of class PhecapModel or PhecapValidation (returned from 
-\code{phecap_train_phenotyping_model} or \code{phecap_validate_phenotyping_model}), 
-or a named list of such objects}
+\item{x}{either a single object of class PhecapModel or PhecapValidation 
+(returned from \code{phecap_train_phenotyping_model} or
+\code{phecap_validate_phenotyping_model}), or a named list of such objects}
 
 \item{axis_x}{an expression that leads to the \code{x} coordinate.
 Recognized quantities include:
@@ -29,10 +31,10 @@ Recognized quantities include:
 \code{rec} (recall),
 \code{f1} (F1 score).}
 
-\item{axis_y}{an expression that leads to the \code{y} coordinate. 
+\item{axis_y}{an expression that leads to the \code{y} coordinate.
 Recognized quantities are the same as those in \code{axis_x}.}
 
-\item{what}{The curves to be included in the figure.}
+\item{what}{TThe curves to be included in the figure.}
 
 \item{ggplot}{if TRUE and ggplot2 is installed, ggplot will be used for the figure.
 Otherwise, the base R graphics functions will be used.}

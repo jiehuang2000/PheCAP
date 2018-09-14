@@ -15,7 +15,7 @@ phecap_read_or_set_frame <- function(source)
     data <- as.data.frame(source)
   }
   if (nrow(data) == 0L || ncol(data) == 0L) {
-    data <- NULL
+    stop("An empty dataset encountered")
   }
   
   return(data)
@@ -26,101 +26,185 @@ phecap_read_or_set_frame <- function(source)
 #' 
 #' Specify the data to be used for phenotyping.
 #' 
-#' Note that icd_feature, nlp_feature and hu_feature cannot be NULL, while training_label
-#' can be NULL if only feature extraction is needed, and validation_label can be NULL 
-#' if only feature extraction and model training is needed.
+#' @usage PhecapData(
+#' data, hu_feature, label, validation,
+#' patient_id = NULL, seed = 12300L, feature_transformation = log1p)
 #' 
-#' @param icd_feature a character scalar of the path of ICD feature, 
-#' or a data.frame of the actual ICD feature.
-#' @param nlp_feature a character scalar of the path of NLP feature, 
-#' or a data.frame of the actual NLP feature.
-#' @param hu_feature a character scalar of the path of HU feature, 
-#' or a data.frame of the actual HU feature. One may also include other 
-#' variables that must be included in the model.
-#' @param training_label a character scalar of the path of training label, 
-#' or a data.frame of the actual training label, or NULL.
-#' @param validation_label a character scalar of the path of validation label, 
-#' or a data.frame of the actual validation label, or NULL.
-#' @param patient_index a character scalar or vector that specify a unique identifier 
-#' for each patient in the data. Such variable(s) must appear in all the dataset above.
-#' @param feature_transformation a function that will be applied to all the features. 
-#' Since count data are typically right-skewed, by default \code{log1p} will be used.
+#' @param data A data.frame consisting of all the variables needed for phenotyping,
+#' or a character scalar of the path to the data,
+#' or a list consisting of either character scalar or data.frame.
+#' If a list is given, patient_id cannot be NULL.
+#' All the datasets in the list will be joined into a single dataset
+#' according to the columns specified by patient_id.
+#' @param hu_feature A character scalar or vector specifying the names of
+#' one of more healthcare utilization (HU) variables.
+#' There variables are always included in the phenotyping model.
+#' @param label A character scalar of the column name that gives the phenotype status
+#' (1 or TRUE: present, 0 or FALSE: absent).
+#' If label is not ready yet, just put a column filled with NA in data.
+#' In such cases only the feature extraction step can be done.
+#' @param validation A character scalar, a real number strictly between 0 and 1,
+#' or an integer not less than 2.
+#' If a character scalar is used, it is treated as the column name
+#' in the data that specifies whether this observation
+#' belongs to the validation samples
+#' (1 or TRUE: validation, 0 or FALSE: training).
+#' If a real number strictly between 0 and 1 is used, it is treated as
+#' the proportion of the validation samples. The actual validation samples
+#' will be drawn from all labeled samples.
+#' If an integer not less than 2 is used, it is treated as
+#' the size of the validation samples. The actual validation samples
+#' will be drawn from all labeled samples.
+#' @param patient_id A character vector for the column names, if any, that uniquely identifies
+#' each patient. Such variables must appear in the data.
+#' patient_id can be NULL if such fields are not contained in the data.
+#' @param seed If validation samples need to be drawn from all labeled samples,
+#' seed specifies the random seed for sampling.
+#' @param feature_transformation A function that will be applied to all the features.
+#' Since count data are typically right-skewed,
+#' by default \code{log1p} will be used.
+#' feature_transformation can be NULL, in which case
+#' no transformation will be done on any of the feature.
 #' 
 #' @return An object of class \code{PhecapData}.
 #' 
 #' @export
 PhecapData <- function(
-  icd_feature, nlp_feature, hu_feature,
-  training_label = NULL, validation_label = NULL,
-  patient_index = "PatientID",
+  data, hu_feature, label, validation, 
+  patient_id = NULL,  seed = 12300L, 
   feature_transformation = log1p)
 {
-  icd_feature <- phecap_read_or_set_frame(icd_feature)
-  nlp_feature <- phecap_read_or_set_frame(nlp_feature)
-  hu_feature <- phecap_read_or_set_frame(hu_feature)
-  if (is.null(icd_feature)) {
-    stop("ICD feature not found")
+  if (is.list(data) && !is.data.frame(data)) {
+    if (length(data) == 0L) {
+      stop("'data' is an empty list")
+    }
+    if (is.null(patient_id)) {
+      stop("'patient_id' cannot be NULL when 'data' is a list")
+    }
+    patient_id <- as.character(patient_id)
+    data <- lapply(data, phecap_read_or_set_frame)
+    for (i in seq_along(data)) {
+      columns <- names(data[[i]])
+      if (!all(patient_id %in% columns)) {
+        stop(sprintf(
+          "Some 'patient_id' are not found in the %d-th dataset: %s", 
+          i, paste0(setdiff(patient_id, columns), collapse = ", ")))
+      }
+    }
+    dt <- data[[1L]]
+    for (i in seq_along(data)[-1L]) {
+      dt <- merge(dt, data[[i]], by = patient_id, all = TRUE)
+    }
+    data <- dt
+    patient_id_part <- data[patient_id]
+    data[patient_id] <- NULL
+  } else {
+    data <- phecap_read_or_set_frame(data)
+    patient_id <- as.character(patient_id)
+    patient_id_part <- data[intersect(names(data), patient_id)]
+    data <- data[setdiff(names(data), patient_id)]
   }
-  if (is.null(nlp_feature)) {
-    stop("NLP feature not found")
+  patient_id <- patient_id_part
+  
+  label_part <- data[[label]]
+  eps <- sqrt(.Machine$double.eps)
+  label_part[abs(label_part) < eps] <- 0
+  label_part[abs(label_part - 1) < eps] <- 1
+  data[is.na(data)] <- 0
+  data[[label]] <- label_part
+  
+  bad <- !sapply(data, is.numeric)
+  if (any(bad)) {
+    warning(sprintf(
+      "Ignoring non-numeric columns: %s",
+      paste0(names(bad)[bad], collapse = ", ")))
+    data <- data[names(bad)[!bad]]
   }
-  if (is.null(hu_feature)) {
-    stop("HU feature not found")
+  columns <- names(data)
+  
+  if (!is.character(hu_feature)) {
+    stop("'hu_feature' should be of type character ")
+  }
+  if (!all(hu_feature %in% columns)) {
+    stop(sprintf(
+      "Some 'hu_feature' are not found in the data: %s",
+      paste0(setdiff(hu_feature, columns), collapse = ", ")))
   }
   
-  training_label <- phecap_read_or_set_frame(training_label)
-  validation_label <- phecap_read_or_set_frame(validation_label)
-  
-  if (!(patient_index %in% names(icd_feature))) {
-    stop(sprintf("ICD feature doesn't contain %s", patient_index))
+  if (!is.character(label)) {
+    stop("'label' should be of type character")
   }
-  if (!(patient_index %in% names(nlp_feature))) {
-    stop(sprintf("NLP feature doesn't contain %s", patient_index))
+  if (length(label) != 1L) {
+    stop("'label' should specify a single column")
   }
-  if (!(patient_index %in% names(hu_feature))) {
-    stop(sprintf("HU feature doesn't contain %s", patient_index))
-  }
-
-  if (!is.null(training_label) && 
-      !(patient_index %in% names(training_label))) {
-    stop(sprintf("Training label doesn't contain %s", patient_index))
-  }
-  if (!is.null(validation_label) && 
-      !(patient_index %in% names(validation_label))) {
-    stop(sprintf("Validation label doesn't contain %s", patient_index))
+  if (!all(label %in% columns)) {
+    stop(sprintf("%s is not found in the data", label))
   }
   
-  if (!is.function(feature_transformation)) {
-    stop("feature_transformation should be a function")
+  index_labeled <- which(!is.na(data[[label]]))
+  if (is.character(validation)) {
+    index_masked <- which(as.logical(dt[[validation]]))
+    training_set <- sort.int(setdiff(index_labeled, index_masked))
+    validation_set <- sort.int(intersect(index_labeled, index_masked))
+    data[[validation]] <- NULL
+  } else {
+    old_random_state <- .Random.seed
+    set.seed(seed)
+    num_labeled <- length(index_labeled)
+    if (length(validation) != 1L || !all(is.numeric(validation))) {
+      stop("Unrecognized value for 'validation'")
+    }
+    if (validation > 0.0 && validation < 1.0) {
+      size <- as.integer(num_labeled * validation + 0.5)
+    } else {
+      size <- as.integer(validation + 0.5)
+    }
+    if (size > num_labeled) {
+      stop("The size of validation samples exceeds that of labeled samples")
+    }
+    size <- min(max(size, 0L), num_labeled)
+    index_masked <- sample(index_labeled, size, replace = FALSE)
+    training_set <- sort.int(setdiff(index_labeled, index_masked))
+    validation_set <- sort.int(intersect(index_labeled, index_masked))
+    .Random.seed <- old_random_state
+  }
+  
+  if (is.null(feature_transformation)) {
+    feature_transformation <- function(x) x
+  } else if (!is.function(feature_transformation)) {
+    stop("'feature_transformation' should be a function or NULL")
   }
   
   data <- list(
-    icd_feature = icd_feature,
-    nlp_feature = nlp_feature,
+    frame = data,
     hu_feature = hu_feature,
-    training_label = training_label,
-    validation_label = validation_label,
-    patient_index = patient_index,
+    label = label,
+    patient_id = patient_id,
+    training_set = training_set,
+    validation_set = validation_set,
     feature_transformation = feature_transformation)
   class(data) <- "PhecapData"
   
   return(data)
 }
 
-#' Define a Surrogate Variable used in Surrogate-Assisted Feature Extraction (SAFE)
-#'
-#' Define a surrogate varible from existing features, and specify associated lower and upper cutoffs.
+
+#' Define a Surrogate Variable used inSurrogate-Assisted Feature Extraction (SAFE)
+#' 
+#' Define a surrogate varible from existing features, and specify
+#' associated lower and upper cutoffs. 
 #' 
 #' This function only stores the definition. No calculation is done.
 #' 
 #' @usage PhecapSurrogate(variable_names, lower_cutoff = 1L, upper_cutoff = 10L)
 #' 
-#' @param variable_names a character scalar or vector consisting of variable names. If a vector is given, 
-#' the value of the surrogate is defined as the sum of the values of each variable.
-#' @param lower_cutoff a numeric scalar. If the surrogate value of a patient is less than or equal to 
-#' this cutoff, then this patient is treated as a control in SAFE.
-#' @param upper_cutoff a numeric scalar. If the surrogate value of a patient is greater than or equal to 
-#' this cutoff, then this patient is treated as a case in SAFE.
+#' @param variable_names a character scalar or vector consisting of variable names.
+#' If a vector is given, the value of the surrogate is defined as the sum of
+#' the values of each variable.
+#' @param lower_cutoff a numeric scalar. If the surrogate value of a patient is less than 
+#' or equal to this cutoff, then this patient is treated as a control in SAFE.
+#' @param upper_cutoff a numeric scalar. If the surrogate value of a patient is greater than 
+#' or equal to this cutoff, then this patient is treated as a case in SAFE.
 #' 
 #' @return An object of class \code{PhecapSurrogate}.
 #' 
@@ -149,19 +233,21 @@ phecap_check_surrogates <- function(
         collapse = ", ")))
     }
   }
+  return(invisible())
 }
 
 
 #' Run Surrogate-Assisted Feature Extraction (SAFE)
 #' 
-#' Run surrogate-assisted feature extraction (SAFE) using unlabeled data and subsampling.
+#' Run surrogate-assisted feature extraction (SAFE) using unlabeled data and subsampling. 
 #' 
-#' In this unlabeled setting, the extremes of each surrogate are used to define cases and controls.
-#' The variables selected are those selected in at least half of the subsamples.
+#' In this unlabeled setting, the extremes of each surrogate are used to define cases and 
+#' controls. The variables selected are those selected in at least half of the subsamples.
 #' 
-#' @usage phecap_run_feature_extraction(data, surrogates,
+#' @usage phecap_run_feature_extraction(
+#' data, surrogates,
 #' subsample_size = 1000L, num_subsamples = 200L,
-#' start_seed = 123L, verbose = 10L)
+#' start_seed = 45600L, verbose = 50L)
 #' 
 #' @param data An object of class PhecapData, obtained by calling PhecapData(...)
 #' @param surrogates A list of objects of class PhecapSurrogate, obtained by something like
@@ -180,21 +266,13 @@ phecap_check_surrogates <- function(
 phecap_run_feature_extraction <- function(
   data, surrogates, 
   subsample_size = 1000L, num_subsamples = 200L, 
-  start_seed = 123L, verbose = 10L)
+  start_seed = 45600L, verbose = 50L)
 {
-  frame <- merge(
-    data$icd_feature, data$nlp_feature, 
-    by = data$patient_index, all = TRUE)
-  frame <- merge(
-    frame, data$hu_feature,
-    by = data$patient_index, all = TRUE)
-  
-  variable_list <- setdiff(
-    names(frame), data$patient_index)
-  variable_matrix <- as.matrix(frame[, variable_list])
-  variable_matrix[is.na(variable_matrix)] <- 0.0
+  old_random_state <- .Random.seed
+  variable_list <- setdiff(names(data$frame), data$label)
+  variable_matrix <- as.matrix(data$frame[, variable_list, drop = FALSE])
   phecap_check_surrogates(surrogates, variable_list)
-
+  
   extremes <- lapply(
     surrogates, function(surrogate) {
       x <- rowSums(variable_matrix[, surrogate$variable_names, 
@@ -203,13 +281,13 @@ phecap_run_feature_extraction <- function(
       controls  <- which(x <= surrogate$lower_cutoff)
       if (length(cases) <= subsample_size %/% 2L) {
         stop(sprintf("'%s' has too few cases; %s or %s",
-             paste0(surrogate$variable_names, collapse = "&"),
-             "decrease upper_cutoff", "decrease subsample_size"))
+                     paste0(surrogate$variable_names, collapse = "&"),
+                     "decrease upper_cutoff", "decrease subsample_size"))
       }
       if (length(controls) <= subsample_size %/% 2L) {
         stop(sprintf("'%s' has too few controls; %s or %s", 
-             paste0(surrogate$variable_names, collapse = "&"),
-             "increase lower_cutoff", "decrease subsample_size"))
+                     paste0(surrogate$variable_names, collapse = "&"),
+                     "increase lower_cutoff", "decrease subsample_size"))
       }
       list(cases = cases, controls = controls)
     })
@@ -222,7 +300,7 @@ phecap_run_feature_extraction <- function(
       paste0(surrogate$variable_names, collapse = "&"))
     print(message)
   }
-
+  
   variable_matrix <- data$feature_transformation(variable_matrix)
   selection <- lapply(seq_along(surrogates), function(k) {
     surrogate <- surrogates[[k]]
@@ -237,8 +315,9 @@ phecap_run_feature_extraction <- function(
     
     # subsampling
     nonzero <- t(sapply(seq_len(num_subsamples), function(ss) {
-      if (verbose > 0L && (ss %% verbose == 1L || ss == num_subsamples)) {
-        cat("Subsample", ss, "\n")
+      if (verbose > 0L && (ss %% verbose == 0L || 
+                           ss == 1L || ss == num_subsamples)) {
+        cat(sprintf("Subsample %d/%d\n", ss, num_subsamples))
       }
       set.seed(start_seed + ss)
       ipos <- sort.int(sample(cases, subsample_size %/% 2L, FALSE))
@@ -261,17 +340,19 @@ phecap_run_feature_extraction <- function(
   frequency <- colMeans(selection)
   names(frequency) <- variable_list
   selected <- variable_list[frequency >= 0.5]
-
+  
   result <- selected
   attr(result, "frequency") <- frequency
   class(result) <- "PhecapFeatureExtraction"
-  result
+  .Random.seed <- old_random_state
+  return(result)
 }
 
 
 phecap_generate_feature_matrix <- function(
-  data, surrogates, frame, feature_selected)
+  data, surrogates, feature_selected)
 {
+  frame <- data$frame
   surrogate_matrix <- sapply(surrogates, function(surrogate) {
     rowSums(frame[, surrogate$variable_names, drop = FALSE])
   })
@@ -279,21 +360,15 @@ phecap_generate_feature_matrix <- function(
   colnames(surrogate_matrix) <- sapply(surrogates, function(surrogate) {
     paste0(surrogate$variable_names, collapse = "&")
   })
-  surrogate_matrix[is.na(surrogate_matrix)] <- 0.0
   
-  hu_matrix <- as.matrix(
-    frame[, setdiff(
-      names(data$hu_feature), data$patient_index),
-      drop = FALSE])
+  hu_matrix <- as.matrix(frame[, data$hu_feature, drop = FALSE])
   hu_matrix <- data$feature_transformation(hu_matrix)
-  hu_matrix[is.na(hu_matrix)] <- 0.0
   
   other_matrix <- as.matrix(
     frame[, setdiff(feature_selected, c(
       colnames(surrogate_matrix), colnames(hu_matrix))),
       drop = FALSE])
   other_matrix <- data$feature_transformation(other_matrix)
-  other_matrix[is.na(other_matrix)] <- 0.0
   other_matrix <- qr.resid(qr(cbind(
     1.0, surrogate_matrix, hu_matrix)), other_matrix)
   
@@ -308,19 +383,19 @@ phecap_generate_feature_matrix <- function(
 
 #' Train Phenotyping Model using the Training Labels
 #' 
-#' Train the phenotyping model on the training dataset, and evaluate 
-#' its performance via random splits of the training dataset.
+#' Train the phenotyping model on the training dataset,
+#' and evaluate its performance via random splits of the training dataset.
 #' 
 #' @usage phecap_train_phenotyping_model(
 #' data, surrogates, feature_selected,
-#' method = "lasso_bic", train_percent = 0.7,
-#' num_splits = 200L, start_seed = 12345L, verbose = 10L)
+#' method = "lasso_bic", train_percent = 0.7, num_splits = 200L,
+#' start_seed = 78900L, verbose = 50L)
 #' 
-#' @param data an object of class \code{PhecapData}, obtained by 
-#' calling \code{PhecapData(...)}.
+#' @param data an object of class \code{PhecapData}, 
+#' obtained by calling \code{PhecapData(...)}.
 #' 
-#' @param surrogates a list of objects of class \code{PhecapSurrogate}, obtained 
-#' by something like \code{list(PhecapSurrogate(...), PhecapSurrogate(...))}.
+#' @param surrogates a list of objects of class \code{PhecapSurrogate}, obtained by 
+#' something like \code{list(PhecapSurrogate(...), PhecapSurrogate(...))}.
 #' 
 #' @param feature_selected a character vector of the features that should be included 
 #' in the model, probably returned by \code{phecap_run_feature_extraction}.
@@ -336,8 +411,8 @@ phecap_generate_feature_matrix <- function(
 #' \code{fit} --- a function for model fitting, and
 #' \code{predict} ---- a function for prediction.
 #' 
-#' @param train_percent The percentage (between 0 and 1) of labels that are used for model 
-#' training during random splits
+#' @param train_percent The percentage (between 0 and 1) of labels that are used for 
+#' model training during random splits
 #' 
 #' @param num_splits The number of random splits.
 #' 
@@ -347,7 +422,7 @@ phecap_generate_feature_matrix <- function(
 #' or remain quiet if verbose is zero
 #' 
 #' @return An object of class \code{PhecapModel}, with components
-#' \item{model}{the fitted model}
+#' \item{coefficients}{the fitted object}
 #' \item{method}{the method used for model training}
 #' \item{feature_selected}{the feature selected by SAFE}
 #' \item{train_roc}{ROC on training dataset}
@@ -362,27 +437,16 @@ phecap_train_phenotyping_model <- function(
   data, surrogates, feature_selected, 
   method = "lasso_bic",
   train_percent = 0.7, num_splits = 200L,
-  start_seed = 12345L, verbose = 10L)
+  start_seed = 78900L, verbose = 50L)
 {
-  if (is.null(data$training_label)) {
-    stop("Missing training label")
+  if (length(data$training_set) < 2L) {
+    stop("Too few training samples")
   }
   
-  frame <- merge(
-    data$icd_feature, data$nlp_feature, 
-    by = data$patient_index, all = TRUE)
-  frame <- merge(
-    frame, data$hu_feature,
-    by = data$patient_index, all = TRUE)
-  frame <- merge(
-    frame, data$training_label,
-    by = data$patient_index, all = TRUE)
-
   feature <- phecap_generate_feature_matrix(
-    data, surrogates, frame, feature_selected)
-  label <- frame[, setdiff(
-    names(data$training_label), data$patient_index)]
-  ii <- which(!is.na(label))
+    data, surrogates, feature_selected)
+  label <- data$frame[, data$label]
+  ii <- data$training_set
   x <- feature[ii, , drop = FALSE]
   y <- label[ii]
   penalty_weight <- c(
@@ -393,9 +457,10 @@ phecap_train_phenotyping_model <- function(
     x, y, penalty_weight, method = method,
     train_percent = train_percent, num_splits = num_splits,
     start_seed = start_seed, verbose = verbose)
-  if (is.numeric(result$model)) {
-    names(result$model) <- c("(Intercept)", colnames(x))
+  if (is.numeric(result$coefficients)) {
+    names(result$coefficients) <- c("(Intercept)", colnames(x))
   }
+  result$surrogates <- surrogates
   result$feature_selected <- feature_selected
   
   class(result) <- "PhecapModel"
@@ -408,13 +473,11 @@ phecap_train_phenotyping_model <- function(
 #' Apply the trained model to all patients in the validation dataset,
 #' and measure the prediction accuracy via ROC and AUC.
 #' 
-#' @usage phecap_validate_phenotyping_model(data, surrogates, model)
+#' @usage phecap_validate_phenotyping_model(data, model)
 #' 
 #' @param data an object of class \code{PhecapData}, 
 #' obtained by calling \code{PhecapData(...)}
-#' @param surrogates a list of objects of class \code{PhecapSurrogate}, obtained by 
-#' something like \code{list(PhecapSurrogate(...), PhecapSurrogate(...))}.
-#' @param model an object of class \code{PhecapModel}, obtained by calling 
+#' @param model an object of class \code{PhecapModel}, obtained by calling
 #' \code{phecap_train_phenotyping_model}.
 #' 
 #' @return An object of class \code{PhecapValidation}, with components
@@ -428,36 +491,28 @@ phecap_train_phenotyping_model <- function(
 #' 
 #' @export
 phecap_validate_phenotyping_model <- function(
-  data, surrogates, model)
+  data, model)
 {
-  if (is.null(data$validation_label)) {
-    stop("Missing validation label")
+  if (length(data$validation_set) < 2L) {
+    stop("Too few validation samples")
   }
   
-  frame <- merge(
-    data$icd_feature, data$nlp_feature, 
-    by = data$patient_index, all = TRUE)
-  frame <- merge(
-    frame, data$hu_feature,
-    by = data$patient_index, all = TRUE)
-  frame <- merge(
-    frame, data$validation_label,
-    by = data$patient_index, all = TRUE)
-
+  surrogates <- model$surrogates
+  feature_selected <- model$feature_selected
+  
   feature <- phecap_generate_feature_matrix(
-    data, surrogates, frame, model$feature_selected)
-  label <- frame[, setdiff(
-    names(data$validation_label), data$patient_index)]
-  ii <- which(!is.na(label))
+    data, surrogates, feature_selected)
+  label <- data$frame[, data$label]
+  ii <- data$validation_set
   x <- feature[ii, , drop = FALSE]
   y <- label[ii]
-
-  prediction <- model$predict_function(model$model, x)
+  
+  prediction <- model$predict_function(model$coefficients, x)
   valid_roc <- get_roc(y, prediction)
   valid_auc <- get_auc(y, prediction)
   
   result <- list(
-    model = model$model,
+    coefficients = model$coefficients,
     method = model$method,
     train_roc = model$train_roc,
     train_auc = model$train_auc,
@@ -473,43 +528,34 @@ phecap_validate_phenotyping_model <- function(
 
 #' Predict Phenotype
 #' 
-#' Compute predicted probability of having the phenotype for each patient in the dataset.
+#' Compute predicted probability of having the phenotype
+#' for each patient in the dataset.
 #' 
-#' @usage phecap_predict_phenotype(data, surrogates, model)
+#' @usage phecap_predict_phenotype(data, model)
 #' 
 #' @param data an object of class \code{PhecapData}, obtained by calling \code{PhecapData(...)}.
-#' @param surrogates a list of objects of class \code{PhecapSurrogate}, obtained by something like
-#' \code{list(PhecapSurrogate(...), PhecapSurrogate(...))}.
-#' @param model an object of class \code{PhecapModel}, probably returned from 
+#' @param model an object of class \code{PhecapModel}, probably returned from
 #' \code{phecap_train_phenotyping_model}.
 #' 
-#' @return A \code{data.frame} with two columns: 
-#' \item{patient_index}{patient identifier,} 
-#' \item{prediction}{predicted phenotype.}
+#' @return A \code{data.frame} with two columns:
+#' \item{patient_index}{patient identifier},
+#' \item{prediction}{predicted phenotype}.
 #' 
 #' @export
 phecap_predict_phenotype <- function(
-  data, surrogates, model)
+  data, model)
 {
-  frame <- merge(
-    data$icd_feature, data$nlp_feature, 
-    by = data$patient_index, all = TRUE)
-  frame <- merge(
-    frame, data$hu_feature,
-    by = data$patient_index, all = TRUE)
-  frame <- merge(
-    frame, data$validation_label,
-    by = data$patient_index, all = TRUE)
-
+  surrogates <- model$surrogates
+  feature_selected <- model$feature_selected
+  
   feature <- phecap_generate_feature_matrix(
-    data, surrogates, frame, model$feature_selected)
-  prediction <- model$predict_function(model$model, feature)
+    data, surrogates, feature_selected)
+  prediction <- model$predict_function(
+    model$coefficients, feature)
   
   result <- data.frame(
-    frame[[data$patient_index]],
-    prediction)
-  names(result) <- c(data$patient_index, "prediction")
-  
+    data$patient_id,
+    prediction = prediction)
   return(result)
 }
 
@@ -522,21 +568,37 @@ print.PhecapFeatureExtraction <- function(x, ...)
 }
 
 
-print.PhecapModel <- function(x, ...)
+print.PhecapData <- function(x, ...)
 {
-  cat("Phenotyping model:\n")
-  print(x$model, ...)
-  cat("AUC on training data:", 
-      format(x$train_auc, digits = 3L), "\n")
-  cat("Average AUC on random splits:", 
-      format(x$split_auc, digits = 3L), "\n")
+  cat("PheCAP Data\n")
+  cat(sprintf(
+    "Feature: %d observations of %d variables\n",
+    nrow(x$frame), ncol(x$frame) - 1L))
+  cat(sprintf(
+    "Label: %d yes, %d no, %d missing\n",
+    sum(x$frame[[x$label]] == 1, na.rm = TRUE),
+    sum(x$frame[[x$label]] == 0, na.rm = TRUE),
+    sum(is.na(x$frame[[x$label]]))))
+  cat(sprintf(
+    "Size of training samples: %d\n", 
+    length(x$training_set)))
+  cat(sprintf(
+    "Size of validation samples: %d\n", 
+    length(x$validation_set)))
+}
+
+print.PhecapFeatureExtraction <- function(x, ...)
+{
+  cat("Feature(s) selected by",
+      "surrogate-assisted feature extraction (SAFE)\n")
+  print(as.character(x), ...)
 }
 
 
 print.PhecapModel <- function(x, ...)
 {
   cat("Phenotyping model:\n")
-  print(x$model, ...)
+  print(x$coefficients, ...)
   cat("AUC on training data:", 
       format(x$train_auc, digits = 3L), "\n")
   cat("Average AUC on random splits:", 
@@ -559,12 +621,14 @@ print.PhecapValidation <- function(x, ...)
 #' 
 #' Plot ROC-like curves to illustrate phenotyping accuracy.
 #' 
-#' @usage phecap_plot_roc_curves(x, axis_x = "1 - spec", axis_y = "sen",
-#' what = c("training", "random-splits", "validation"), ggplot = TRUE, ...)
+#' @usage phecap_plot_roc_curves(
+#' x, axis_x = "1 - spec", axis_y = "sen",
+#' what = c("training", "random-splits", "validation"),
+#' ggplot = TRUE, ...)
 #' 
-#' @param x either a single object of class PhecapModel or PhecapValidation (returned from 
-#' \code{phecap_train_phenotyping_model} or \code{phecap_validate_phenotyping_model}), 
-#' or a named list of such objects
+#' @param x either a single object of class PhecapModel or PhecapValidation 
+#' (returned from \code{phecap_train_phenotyping_model} or
+#' \code{phecap_validate_phenotyping_model}), or a named list of such objects
 #' 
 #' @param axis_x 
 #' an expression that leads to the \code{x} coordinate.
@@ -583,9 +647,9 @@ print.PhecapValidation <- function(x, ...)
 #' \code{prec} (precision),
 #' \code{rec} (recall),
 #' \code{f1} (F1 score).
-#' @param axis_y an expression that leads to the \code{y} coordinate. 
+#' @param axis_y an expression that leads to the \code{y} coordinate.
 #' Recognized quantities are the same as those in \code{axis_x}.
-#' @param what The curves to be included in the figure.
+#' @param what TThe curves to be included in the figure.
 #' @param ggplot if TRUE and ggplot2 is installed, ggplot will be used for the figure.
 #' Otherwise, the base R graphics functions will be used.
 #' @param \dots arguments to be ignored.
@@ -594,7 +658,9 @@ print.PhecapValidation <- function(x, ...)
 phecap_plot_roc_curves <- function(
   x, axis_x = "1 - spec", axis_y = "sen", 
   what = c("training", "random-splits", "validation"),
-  ggplot = TRUE, ...)  {
+  ggplot = TRUE,
+  ...)
+{
   object <- x
   if (is(x, "PhecapModel") || is(x, "PhecapValidation")) {
     object <- list(x)
@@ -632,7 +698,7 @@ phecap_plot_roc_curves <- function(
       ii <- ii + 1L
     }
   }
-
+  
   df <- do.call("rbind", df)
   df <- aggregate(cbind(cut, value_y) ~ kk + ww + value_x, df, 
                   max)

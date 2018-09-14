@@ -1,7 +1,19 @@
-#' Example EHR data with 10,000 records.
+#' A Synthetic EHR Dataset
 #'
-#' A dataset containing the example to illustrate the main steps of the 
-#' algorithms and usage of functions in the package.
+#' This dataset gives a sample dataset for EHR phenotyping.
+#' It contains counts for ICD codes, counts for NLP mentions,
+#' healthcare utilization (HU) features for all observations.
+#' It also contains the accurate phenotypes for 181 observations.
 #'
-#' @format A data frame with 10,000 rows and 588 variables:
-"ehrdata"
+#' @name ehr_data 
+#' 
+#' @aliases ehr_data
+#'
+#' @docType data
+#' 
+#' @usage data(ehr_data)
+#' 
+#' @format A data.frame with 10000 observations of 588 variables.
+#' 
+#' @keywords datasets
+"ehr_data"
