@@ -38,9 +38,6 @@
 <li>
   <a href="../index.html">Home</a>
 </li>
-<li>
-  <a href="../articles/PheCAP.html">Get Started</a>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Examples
@@ -130,7 +127,7 @@
 ## Subsample 150/200
 ## Subsample 200/200</code></pre>
 <pre><code>##    user  system elapsed 
-##  76.795   1.039  77.869</code></pre>
+##  76.443   1.232  77.698</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">feature_selected</a></code></pre></div>
 <p>Train phenotyping model and show the fitted model, with the AUC on the training set as well as random splits.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">system.time</span>(model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_train_phenotyping_model.html">phecap_train_phenotyping_model</a></span>(data, surrogates, feature_selected))</a></code></pre></div>
@@ -140,7 +137,7 @@
 ## Split 150/200
 ## Split 200/200</code></pre>
 <pre><code>##    user  system elapsed 
-##   2.429   0.010   2.443</code></pre>
+##   2.327   0.015   2.343</code></pre>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">model</a></code></pre></div>
 <p>Validate phenotyping model using validation label, and show the AUC and ROC</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">validation &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_validate_phenotyping_model.html">phecap_validate_phenotyping_model</a></span>(data, model)</a></code></pre></div>
