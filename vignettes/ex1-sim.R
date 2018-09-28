@@ -29,7 +29,7 @@ ehr_data[ii, "label"] <- with(
 
 ## ------------------------------------------------------------------------
 data <- PhecapData(ehr_data, "HU", "label", 0.4)
-# data
+str(data)
 
 ## ------------------------------------------------------------------------
 surrogates <- list(
@@ -46,13 +46,14 @@ feature_selected
 
 ## ------------------------------------------------------------------------
 model <- phecap_train_phenotyping_model(data, surrogates, feature_selected)
-# model
+str(model)
 
 ## ------------------------------------------------------------------------
 validation <- phecap_validate_phenotyping_model(data, model)
-# validation
+str(validation)
 phecap_plot_roc_curves(validation)
 
 ## ------------------------------------------------------------------------
 phenotype <- phecap_predict_phenotype(data, model)
+str(phenotype)
 

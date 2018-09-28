@@ -45,7 +45,7 @@ Define features and labels used for phenotyping.
 
 ```{r}
 data <- PhecapData(ehr_data, "HU", "label", 0.4)
-# data
+str(data)
 ```
 
 Specify the surrogate used for surrogate-assisted feature extraction (SAFE). The typical way is to specify a main ICD code, a main NLP CUI, as well as their combination. The default lower_cutoff is 1, and the default upper_cutoff is 10. In some cases one may want to define surrogate through lab test. Feel free to change the cutoffs based on domain knowledge.
@@ -71,14 +71,14 @@ Train phenotyping model and show the fitted model, with the AUC on the training 
 
 ```{r}
 model <- phecap_train_phenotyping_model(data, surrogates, feature_selected)
-# model
+str(model)
 ```
 
 Validate phenotyping model using validation label, and show the AUC and ROC.
 
 ```{r}
 validation <- phecap_validate_phenotyping_model(data, model)
-# validation
+str(validation)
 phecap_plot_roc_curves(validation)
 ```
 
@@ -86,5 +86,6 @@ Apply the model to all the patients to obtain predicted phenotype.
 
 ```{r}
 phenotype <- phecap_predict_phenotype(data, model)
+str(phenotype)
 ```
 

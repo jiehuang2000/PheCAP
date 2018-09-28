@@ -6,8 +6,8 @@ set.seed(123)
 data(ehr_data)
 data <- PhecapData(ehr_data, "healthcare_utilization", "label", 0.4)
 
-## ---- eval=FALSE---------------------------------------------------------
-#  data
+## ------------------------------------------------------------------------
+str(data)
 
 ## ------------------------------------------------------------------------
 surrogates <- list(
@@ -24,24 +24,25 @@ surrogates <- list(
 ## ---- cache=TRUE---------------------------------------------------------
 system.time(feature_selected <- phecap_run_feature_extraction(data, surrogates))
 
-## ---- eval=FALSE---------------------------------------------------------
-#  feature_selected
+## ------------------------------------------------------------------------
+str(feature_selected)
 
 ## ------------------------------------------------------------------------
 system.time(model <- phecap_train_phenotyping_model(data, surrogates, feature_selected))
 
-## ---- eval=FALSE---------------------------------------------------------
-#  model
+## ------------------------------------------------------------------------
+str(model)
 
 ## ------------------------------------------------------------------------
 validation <- phecap_validate_phenotyping_model(data, model)
 
-## ---- eval=FALSE---------------------------------------------------------
-#  validation
+## ------------------------------------------------------------------------
+str(validation)
 
 ## ------------------------------------------------------------------------
 phecap_plot_roc_curves(validation)
 
-## ---- eval=FALSE---------------------------------------------------------
-#  phenotype <- phecap_predict_phenotype(data, model)
+## ------------------------------------------------------------------------
+phenotype <- phecap_predict_phenotype(data, model)
+str(phenotype)
 
