@@ -2,12 +2,9 @@
 library(PheCAP)
 
 ## ------------------------------------------------------------------------
-set.seed(123)
 data(ehr_data)
 data <- PhecapData(ehr_data, "healthcare_utilization", "label", 0.4)
-
-## ------------------------------------------------------------------------
-str(data)
+data
 
 ## ------------------------------------------------------------------------
 surrogates <- list(
@@ -25,19 +22,15 @@ surrogates <- list(
 system.time(feature_selected <- phecap_run_feature_extraction(data, surrogates))
 
 ## ------------------------------------------------------------------------
-str(feature_selected)
+feature_selected
 
 ## ------------------------------------------------------------------------
-system.time(model <- phecap_train_phenotyping_model(data, surrogates, feature_selected))
-
-## ------------------------------------------------------------------------
-str(model)
+model <- phecap_train_phenotyping_model(data, surrogates, feature_selected)
+model
 
 ## ------------------------------------------------------------------------
 validation <- phecap_validate_phenotyping_model(data, model)
-
-## ------------------------------------------------------------------------
-str(validation)
+validation
 
 ## ------------------------------------------------------------------------
 phecap_plot_roc_curves(validation)

@@ -11,20 +11,15 @@ vignette: >
 library(PheCAP)
 ```
 
-Load the EHR data from the `PheCAP` package.
+Load Data.
 
 ```{r}
-set.seed(123)
 data(ehr_data)
 data <- PhecapData(ehr_data, "healthcare_utilization", "label", 0.4)
+data
 ```
 
-```{r}
-str(data)
-```
-
-Specify the surrogate used for surrogate-assisted feature extraction (SAFE).
-The typical way is to specify a main ICD code, a main NLP CUI, as well as their combination. In some cases one may want to define surrogate through lab test. The default lower_cutoff is 1, and the default upper_cutoff is 10. Feel free to change the cutoffs based on domain knowledge.
+Specify the surrogate used for surrogate-assisted feature extraction (SAFE). The typical way is to specify a main ICD code, a main NLP CUI, as well as their combination. In some cases one may want to define surrogate through lab test. The default lower_cutoff is 1, and the default upper_cutoff is 10. Feel free to change the cutoffs based on domain knowledge.
 
 ```{r}
 surrogates <- list(
@@ -46,27 +41,21 @@ system.time(feature_selected <- phecap_run_feature_extraction(data, surrogates))
 ```
 
 ```{r}
-str(feature_selected)
+feature_selected
 ```
 
-Train phenotyping model and show the fitted model, with the AUC on the training set as well as random splits.
+Train phenotyping model and show the fitted model, with the AUC on the training set as well as random splits
 
 ```{r}
-system.time(model <- phecap_train_phenotyping_model(data, surrogates, feature_selected))
-```
-
-```{r}
-str(model)
+model <- phecap_train_phenotyping_model(data, surrogates, feature_selected)
+model
 ```
 
 Validate phenotyping model using validation label, and show the AUC and ROC
 
 ```{r}
 validation <- phecap_validate_phenotyping_model(data, model)
-```
-
-```{r}
-str(validation)
+validation
 ```
 
 ```{r}

@@ -7,7 +7,7 @@
 phecap_train_phenotyping_model(
 data, surrogates, feature_selected,
 method = "lasso_bic", train_percent = 0.7, num_splits = 200L,
-start_seed = 78900L, verbose = 50L)
+start_seed = 78900L, verbose = 0L)
 }
 \arguments{
 \item{data}{an object of class \code{PhecapData}, 

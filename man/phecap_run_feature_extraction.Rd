@@ -7,7 +7,7 @@
 phecap_run_feature_extraction(
 data, surrogates,
 subsample_size = 1000L, num_subsamples = 200L,
-start_seed = 45600L, verbose = 50L)
+start_seed = 45600L, verbose = 0L)
 }
 \arguments{
 \item{data}{An object of class PhecapData, obtained by calling PhecapData(...)}
