@@ -39,7 +39,7 @@
   <a href="../index.html">Home</a>
 </li>
 <li>
-  <a href="../articles/main-steps.html">Main Steps</a>
+  <a href="../articles/main.html">Main Steps</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -82,49 +82,41 @@
       <h1>Main Steps</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/parse-health/PheCAP/blob/master/vignettes/main-steps.Rmd"><code>vignettes/main-steps.Rmd</code></a></small>
-      <div class="hidden name"><code>main-steps.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/parse-health/PheCAP/blob/master/vignettes/main.Rmd"><code>vignettes/main.Rmd</code></a></small>
+      <div class="hidden name"><code>main.Rmd</code></div>
 
     </div>
 
     
     
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(PheCAP)</a></code></pre></div>
-<p>Specify the paths for features and labels. Labels can be NULL if only surrogate-assisted feature extraction (SAFE) is conducted.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/PhecapData.html">PhecapData</a></span>(</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="dt">icd_feature =</span> <span class="st">"icd_feature.csv"</span>,</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="dt">nlp_feature =</span> <span class="st">"nlp_feature.csv"</span>,</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">  <span class="dt">hu_feature =</span> <span class="st">"hu_feature.csv"</span>,</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="dt">training_label =</span> <span class="st">"training_label.csv"</span>,</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">  <span class="dt">validation_label =</span> <span class="st">"validation_label.csv"</span>,</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">  <span class="dt">patient_index =</span> <span class="st">"PatientID"</span>)</a></code></pre></div>
+<p>Load data into R. The last argument of <code>PhecapData</code>, 0.4, refers to the percentage of labels reserved as test set.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">data</span>(ehr_data)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw"><a href="../reference/PhecapData.html">PhecapData</a></span>(ehr_data, <span class="st">"healthcare_utilization"</span>, <span class="st">"label"</span>, <span class="fl">0.4</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">data</a></code></pre></div>
 <p>Specify the surrogate used for surrogate-assisted feature extraction (SAFE). The typical way is to specify a main ICD code, a main NLP CUI, as well as their combination. In some cases one may want to define surrogate through lab test. The default lower_cutoff is 1, and the default upper_cutoff is 10. Feel free to change the cutoffs based on domain knowledge.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">surrogates &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="kw"><a href="../reference/PhecapSurrogate.html">PhecapSurrogate</a></span>(</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">    <span class="dt">variable_names =</span> <span class="st">"ICD1"</span>,</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">    <span class="dt">variable_names =</span> <span class="st">"main_ICD"</span>,</a>
 <a class="sourceLine" id="cb3-4" data-line-number="4">    <span class="dt">lower_cutoff =</span> <span class="dv">1</span>, <span class="dt">upper_cutoff =</span> <span class="dv">10</span>),</a>
 <a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="kw"><a href="../reference/PhecapSurrogate.html">PhecapSurrogate</a></span>(</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">    <span class="dt">variable_names =</span> <span class="st">"NLP1"</span>,</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">    <span class="dt">variable_names =</span> <span class="st">"main_NLP"</span>,</a>
 <a class="sourceLine" id="cb3-7" data-line-number="7">    <span class="dt">lower_cutoff =</span> <span class="dv">1</span>, <span class="dt">upper_cutoff =</span> <span class="dv">10</span>),</a>
 <a class="sourceLine" id="cb3-8" data-line-number="8">  <span class="kw"><a href="../reference/PhecapSurrogate.html">PhecapSurrogate</a></span>(</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">    <span class="dt">variable_names =</span> <span class="kw">c</span>(<span class="st">"ICD1"</span>, <span class="st">"NLP1"</span>),</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">    <span class="dt">variable_names =</span> <span class="kw">c</span>(<span class="st">"main_ICD"</span>, <span class="st">"main_NLP"</span>),</a>
 <a class="sourceLine" id="cb3-10" data-line-number="10">    <span class="dt">lower_cutoff =</span> <span class="dv">1</span>, <span class="dt">upper_cutoff =</span> <span class="dv">10</span>))</a></code></pre></div>
 <p>Run surrogate-assisted feature extraction (SAFE) and show result.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">feature_selected &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_run_feature_extraction.html">phecap_run_feature_extraction</a></span>(</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">  data, surrogates)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">print</span>(feature_selected)</a></code></pre></div>
-<p>Train phenotyping model and show the fitted model, with the AUC on the training set as well as random splits</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_train_phenotyping_model.html">phecap_train_phenotyping_model</a></span>(</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">  data, surrogates, feature_selected)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw">print</span>(model)</a></code></pre></div>
-<p>Validate phenotyping model using validation label, and show the AUC and ROC</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">validation &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_validate_phenotyping_model.html">phecap_validate_phenotyping_model</a></span>(</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">  data, surrogates, model)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw">print</span>(validation)</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw"><a href="../reference/phecap_plot_roc_curves.html">phecap_plot_roc_curves</a></span>(validation)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">feature_selected &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_run_feature_extraction.html">phecap_run_feature_extraction</a></span>(data, surrogates)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">feature_selected</a></code></pre></div>
+<p>Train phenotyping model and show the fitted model, with the AUC on the training set as well as random splits.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">model &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_train_phenotyping_model.html">phecap_train_phenotyping_model</a></span>(data, surrogates, feature_selected)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">model</a></code></pre></div>
+<p>Validate phenotyping model using validation label, and show the AUC and ROC.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">validation &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_validate_phenotyping_model.html">phecap_validate_phenotyping_model</a></span>(data, model)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">validation</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw"><a href="../reference/phecap_plot_roc_curves.html">phecap_plot_roc_curves</a></span>(validation)</a></code></pre></div>
 <p>Apply the model to all the patients to obtain predicted phenotype.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">phenotype &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_predict_phenotype.html">phecap_predict_phenotype</a></span>(</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">  data, surrogates, model)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">phenotype &lt;-<span class="st"> </span><span class="kw"><a href="../reference/phecap_predict_phenotype.html">phecap_predict_phenotype</a></span>(data, model)</a></code></pre></div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
